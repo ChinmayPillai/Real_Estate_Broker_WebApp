@@ -2,7 +2,9 @@ Real Estate Broker WebApp developed for Neural Dynamics using MERN stack
 
 ## Setup
 
-`git clone git@github.com:ChinmayPillai/Real_Estate_Broker_WebApp.git`
+```
+git clone git@github.com:ChinmayPillai/Real_Estate_Broker_WebApp.git
+```
 
 ### Client 
 ```
