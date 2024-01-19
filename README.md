@@ -1,4 +1,4 @@
-Real Estate Broker WebApp developed for Neural Dynamics using MERN stack
+Real Estate Broker Web Application developed for Neural Dynamics using MERN stack
 
 ## Setup
 
