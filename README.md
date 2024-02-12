@@ -1,4 +1,4 @@
-Real Estate Broker Web Application developed for Neural Dynamics using MERN stack
+Real Estate Broker Web Application developed for Neural Dynamics using React and Django
 
 ## Setup
 
@@ -13,9 +13,10 @@ npm install
 npm run dev
 ```
 
-### Server
-```
-cd Server
-npm install
-npm run dev
-```
+## Tech Stack
+
+### Frontend
+1. ReactJS
+
+### Backend
+1. Django
