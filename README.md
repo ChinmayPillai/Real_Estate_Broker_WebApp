@@ -20,3 +20,6 @@ npm run dev
 
 ### Backend
 1. Django
+
+### Database
+PostgreSQL
