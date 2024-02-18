@@ -13,6 +13,11 @@ npm install
 npm run dev
 ```
 
+### Server
+```
+python manage.py runserver [port]
+```
+
 ## Tech Stack
 
 ### Frontend
