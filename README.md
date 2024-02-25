@@ -1,4 +1,4 @@
-Real Estate Broker Web Application developed for Neural Dynamics using React and Django
+Real Estate Broker Web Application developed using React and Django. Course Project for CS253 - Software Development and Operations
 
 ## Setup
 
