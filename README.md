@@ -24,7 +24,7 @@ pip install mysqlclient
 
 2. MySQL Setup
     * Install MySQL
-    * Create database named *real_estate_broker*
+    * Create database/schema named *real_estate_broker*
     * Create user named *dev* with password *123* with DBA role (full access to the above database)
 
 3. Run Server
