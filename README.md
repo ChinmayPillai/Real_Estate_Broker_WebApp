@@ -43,4 +43,4 @@ python manage.py runserver [port]
 1. Django
 
 ### Database
-PostgreSQL
+MySQL
