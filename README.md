@@ -14,7 +14,23 @@ npm run dev
 ```
 
 ### Server
+
+1. Install Django and mysqlclient
 ```
+pip install django
+pip install mysqlclient
+```
+
+2. MySQL Setup
+    a. Install MySQL
+    b. Create database named *real_estate_broker*
+    c. Create user named *dev* with password *123* with DBA role (full access to the above database)
+
+3. Run Server
+```
+cd server
+python manage.py makemigrations
+python manage.py migrate 
 python manage.py runserver [port]
 ```
 
