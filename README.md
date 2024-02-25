@@ -1,4 +1,5 @@
-Real Estate Broker Web Application developed using React and Django. Course Project for CS253 - Software Development and Operations
+# Real Estate Broker
+Full Stack Web Application developed using **React, Django & MySQL**. Course Project for CS253 - Software Development and Operations
 
 ## Setup
 
