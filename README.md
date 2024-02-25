@@ -1,7 +1,7 @@
 # Real Estate Broker
 Full Stack Web Application developed using **React, Django & MySQL**. Course Project for CS253 - Software Development and Operations
 
-## Setup
+## Build
 
 ```
 git clone git@github.com:ChinmayPillai/Real_Estate_Broker_WebApp.git
