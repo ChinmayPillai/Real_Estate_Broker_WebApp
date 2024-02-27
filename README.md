@@ -16,13 +16,13 @@ npm run dev
 
 ### Server
 
-1. Install Django and mysqlclient
+1. Package Installations
 ```
 pip install django
 pip install mysqlclient
 ```
 
-2. MySQL Setup
+2. Database Setup
     * Install MySQL
     * Create database/schema named *real_estate_broker*
     * Create user named *dev* with password *123* with DBA role (full access to the above database)
@@ -38,10 +38,10 @@ python manage.py runserver [port]
 ## Tech Stack
 
 ### Frontend
-1. ReactJS
+ReactJS
 
 ### Backend
-1. Django
+Django
 
 ### Database
 MySQL
