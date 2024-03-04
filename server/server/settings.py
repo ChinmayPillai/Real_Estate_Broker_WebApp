@@ -34,10 +34,12 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    #'django.contrib.sessions',
+    # 'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'testApp',
+    'api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -80,8 +82,8 @@ DATABASES = {
         'NAME': 'real_estate_broker',
         'USER': 'dev',
         'PASSWORD': '123',
-        'HOST':'localhost',
-        'PORT':'3306',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
