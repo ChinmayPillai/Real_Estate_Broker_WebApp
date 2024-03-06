@@ -8,6 +8,18 @@ export default function Navbar(){
                     <li>
                         <Link to="/">Home</Link>
                     </li>
+                    <li>
+                        <Link to="property">Property</Link>
+                    </li>
+                    <li>
+                        <Link to="portfolio">Portfolio</Link>
+                    </li>
+                    <li>
+                        <Link to="wishlist">Wishlist</Link>
+                    </li>
+                    <li>
+                        <Link to="funds">Funds</Link>
+                    </li>
                 </ul>
             </nav>
             <Outlet />
