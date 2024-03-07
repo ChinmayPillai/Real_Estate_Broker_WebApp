@@ -6,6 +6,8 @@
   display: flex;
   flex-direction: column;
   align-items: center; 
+  justify-content: space-between;
+  min-height: 100vh;
 }
 
 @media (max-width: 600px) {
@@ -13,6 +15,20 @@
   max-width: 90%; 
   }
 }
+
+@media (max-width: 900px) {
+  .main-area{
+  max-width: 95%; 
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-area{
+  max-width: 95%; 
+  }
+}
+
+
 /* .css-zndlpk-MuiContainer-root {
   width: 100vw;
 } */

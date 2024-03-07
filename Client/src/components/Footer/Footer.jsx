@@ -25,7 +25,11 @@ const Footer = () => {
       sx={{ mt: 4, width: " 100vw", display: "flex" }}
     >
       <div className="comp1">
-        <Typography variant="h6" sx={{ fontWeight: "600" }} gutterBottom>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: "600", textDecoration: "underline" }}
+          gutterBottom
+        >
           Contact Us
         </Typography>
         <Typography variant="body1" gutterBottom>

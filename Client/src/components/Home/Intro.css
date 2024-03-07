@@ -1,24 +1,34 @@
 
 .e1,.e2,.e3,.button{
-    text-align: left;
-    /* display: block; */
+    text-align: center;
+}
+
+
+.e2,.e3,.button{
+    max-width: 95%;
 }
 
 .intro{
     align-items: center;
     gap:20px;
+    flex-direction: column;
 }
 .about-us{
-max-width: 50%;}
+    max-width: 95%;
+}
+
 .find{
     display:flex;
     flex-direction: column;
     gap:12px;
     border-radius:5%;
     color: #64748B;
+    align-items: center;
     padding: 5px;
+    /* max-width: 100%; */
 
 }
+
 
 .find:hover{
     box-shadow: 0% 1% 2% 0% #0000001A;
@@ -27,17 +37,7 @@ max-width: 50%;}
     outline:none;
 
 }
-@media(max-width:900px){
-    .intro{
-        flex-direction: column;
-        justify-content: center;
-        gap:20px;
-    }
-    .about-us,.find{
-        min-width: 100%;
-    }
 
-}
 .e1{
 font-size: 12px;
 font-weight: 400;
@@ -57,7 +57,3 @@ font-size: 16px;
 font-weight: 400;
 color:black;
 }
-
-/* .button{
-    
-} */

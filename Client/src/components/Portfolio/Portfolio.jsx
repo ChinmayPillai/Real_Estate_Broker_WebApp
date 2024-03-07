@@ -1,15 +1,5 @@
-import React from "react";
-import {
-  Button,
-  Typography,
-  Container,
-  Card,
-  CardActionArea,
-  CardMedia,
-} from "@mui/material";
-
 const Portfolio = () => {
-  return {};
+  return <h1>Portfolio</h1>;
 };
 
 export default Portfolio;

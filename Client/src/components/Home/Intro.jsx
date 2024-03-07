@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Button,
   Typography,
@@ -6,14 +6,58 @@ import {
   Card,
   CardActionArea,
   CardMedia,
+  ListItem,
+  ListItemButton,
 } from "@mui/material";
-import "./Portfolio.css";
-import propertyimg from "./prop.webp";
+import "./Intro.css";
+import propertyAbout from "./property-about.jpeg";
 
 const HomeBuySection = ({ scrollToBuyingContainer }) => {
+  const AboutUSContainerRef = useRef(null);
+  // Function to handle the button click event
+  const scrollToAboutUs = () => {
+    window.scrollTo({
+      top: AboutUSContainerRef.current.offsetTop - 65,
+      behavior: "smooth",
+    });
+    // buyingContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
   return (
     <Container className="intro" sx={{ mt: 4, display: "flex" }}>
-      <div class="about-us">
+      <div className="find">
+        <div className="e1">BUY/SELL A PROPERTY</div>
+        <Card sx={{ width: "100vw" }}>
+          <CardMedia
+            component="img"
+            image={propertyAbout} // Replace with the actual image path
+            alt="Image description"
+            sx={{
+              boxSizing: "border-box",
+            }}
+          />
+        </Card>
+        <div className="e2">Find, Buy, Sell & Own Your Dream Property</div>
+        <div className="e3">
+          Explore from Apartments, land, builder floors, villas and more
+        </div>
+        <ListItem sx={{ justifyContent: "center", gap: "10%" }}>
+          <Button
+            className="button"
+            variant="contained"
+            onClick={scrollToBuyingContainer}
+          >
+            Explore Buying
+          </Button>
+          <Button
+            className="button"
+            variant="contained"
+            onClick={scrollToAboutUs}
+          >
+            About Us
+          </Button>
+        </ListItem>
+      </div>
+      <div className="about-us" ref={AboutUSContainerRef}>
         <Typography variant="h4" sx={{ fontWeight: "700" }} gutterBottom>
           About Us
         </Typography>
@@ -29,30 +73,6 @@ const HomeBuySection = ({ scrollToBuyingContainer }) => {
           results every step of the way. Join us today and experience the
           difference with Real Estate Broker.
         </Typography>
-        <img src="/prop.webp" alt="" srcset="" style={{ height: "200px" }} />
-      </div>
-
-      <div class="find">
-        <div class="e1">BUY/SELL A PROPERTY</div>
-        <Card>
-          <CardMedia
-            component="img"
-            height="200"
-            image={propertyimg} // Replace with the actual image path
-            alt="Image description"
-          />
-        </Card>
-        <div class="e2">Find, Buy, Sell & Own Your Dream Property</div>
-        <div class="e3">
-          Explore from Apartments, land, builder floors, villas and more
-        </div>
-        <Button
-          className="button"
-          variant="contained"
-          onClick={scrollToBuyingContainer}
-        >
-          Explore Buying
-        </Button>
       </div>
     </Container>
   );

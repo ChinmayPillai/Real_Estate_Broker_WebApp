@@ -66,7 +66,7 @@ export default function Home() {
   const handleExploreBuyingClick = () => {
     // Scroll to the buying container
     window.scrollTo({
-      top: buyingContainerRef.current.offsetTop,
+      top: buyingContainerRef.current.offsetTop - 65,
       behavior: "smooth",
     });
     // buyingContainerRef.current.scrollIntoView({ behavior: 'smooth' });
