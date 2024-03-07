@@ -1,0 +1,38 @@
+.footer {
+    background-color: #f5f5f5;
+    color:#333333;
+    text-align: center;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center; /* Align items at the start for bigger screens */
+    padding: 10px;
+
+
+  }
+  .icon{
+    color:#333333;
+  }
+
+  .social-icon {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+  .details{
+
+    align-items: center;
+  }
+  
+  @media (max-width: 900px) {
+    .footer {
+      flex-direction: column; /* Change to column layout for mobile screens */
+      align-items: center; /* Center align items for mobile screens */
+    }
+    
+    .comp1 {
+      text-align: center; /* Center align contact us section for mobile screens */
+      margin-bottom: 20px; /* Add margin for separation */
+    }
+  }
+  

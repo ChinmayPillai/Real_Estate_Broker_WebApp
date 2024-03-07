@@ -4,14 +4,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const [openDrawer, setOpenDrawer] = useState(false);
+    const [openDrawer, setOpenDrawer] = useState(false);
 
-  const toggleDrawer = () => {
-    setOpenDrawer(!openDrawer);
-  };
+    const toggleDrawer = () => {
+      setOpenDrawer(!openDrawer);
+    };
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="sticky" sx={{background:'#007bff', color:'#ffffff'}}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Real Estate Broker

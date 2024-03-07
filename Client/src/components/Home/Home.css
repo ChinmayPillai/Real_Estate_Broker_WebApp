@@ -1,0 +1,17 @@
+.list-item{
+    border-radius: 10%;
+    border: 1px;
+    gap: 12px;
+    border: 1px solid #E7EAEE;
+    color: #64748B;
+    background-color: red;
+}
+
+.list-item-action:focus,.list-item-button:focus{
+
+    outline:none;
+}
+.list-item:hover{
+    border: 1.5px solid #6183E4;
+    box-shadow: 0% 1% 2% 0% #0000001A;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Container,
   Grid,
@@ -9,6 +9,9 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import "./Home.css";
+import Intro from "./Intro";
+import propertyimg from "./prop.webp";
 
 export default function Home() {
   const [count, setCount] = useState(0);
@@ -35,55 +38,59 @@ export default function Home() {
       price: "$400,000",
     },
     {
-        id: 4,
-        image: "property1.jpg",
-        type: "Apartment",
-        location: "New York",
-        price: "$500,000",
-      },
-      {
-        id: 5,
-        image: "property2.jpg",
-        type: "House",
-        location: "Los Angeles",
-        price: "$750,000",
-      },
-      {
-        id: 6,
-        image: "property3.jpg",
-        type: "Condo",
-        location: "Chicago",
-        price: "$400,000",
-      },
-    
+      id: 4,
+      image: "property1.jpg",
+      type: "Apartment",
+      location: "New York",
+      price: "$500,000",
+    },
+    {
+      id: 5,
+      image: "property2.jpg",
+      type: "House",
+      location: "Los Angeles",
+      price: "$750,000",
+    },
+    {
+      id: 6,
+      image: "property3.jpg",
+      type: "Condo",
+      location: "Chicago",
+      price: "$400,000",
+    },
   ];
+
+  const buyingContainerRef = useRef(null);
+
+  // Function to handle the button click event
+  const handleExploreBuyingClick = () => {
+    // Scroll to the buying container
+    window.scrollTo({
+      top: buyingContainerRef.current.offsetTop,
+      behavior: "smooth",
+    });
+    // buyingContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <>
-      <Container sx={{ mt: 4 }}>
-        <Typography variant="h4" gutterBottom>
-          About Us
-        </Typography>
-        <Typography variant="body1">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec
-          fringilla est. Vivamus ut aliquet justo. Nullam quis lacus eu metus
-          suscipit rutrum. Sed lacinia magna nec diam vehicula, id ultrices diam
-          sollicitudin. Aliquam consectetur luctus ligula, sit amet mattis nulla
-          luctus vel.
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Saepe fuga possimus distinctio minus debitis, quod facere cumque cupiditate quidem repudiandae nemo, maiores accusantium enim ex magni, ea expedita hic eaque!
-        </Typography>
-      </Container>
-      <Container sx={{ mt: 4 }}>
+      <Intro scrollToBuyingContainer={handleExploreBuyingClick} />
+      <Container sx={{ mt: 4 }} ref={buyingContainerRef}>
         <Grid container spacing={4}>
           {properties.map((property) => (
             <Grid item xs={12} sm={6} md={4} key={property.id}>
-              <Card>
-                <CardActionArea>
+              <Card className="list-item" sx={{ borderRadius: "10%" }}>
+                <CardActionArea className="list-item-action">
                   <CardMedia
                     component="img"
                     height="200"
-                    image={property.image}
+                    image={propertyimg}
                     alt={property.type}
+                    sx={{
+                      padding: "10px",
+                      boxSizing: "border-box",
+                      borderRadius: "10%",
+                    }}
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
@@ -97,7 +104,11 @@ export default function Home() {
                     </Typography>
                   </CardContent>
                 </CardActionArea>
-                <Button size="small" color="primary">
+                <Button
+                  size="small"
+                  color="primary"
+                  className="list-item-button"
+                >
                   View Details
                 </Button>
               </Card>
