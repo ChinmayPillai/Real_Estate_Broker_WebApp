@@ -15,8 +15,8 @@ class UserProfile(models.Model):
     funds = models.PositiveIntegerField()
     money_invested = models.PositiveIntegerField()
     pnl = models.IntegerField()
-    portfolio = models.ManyToManyField(Property)
-    watchlist = models.ManyToManyField(Property)
+    portfolio = models.ManyToManyField(Property, related_name='portfolio')
+    watchlist = models.ManyToManyField(Property, related_name='watchlist')
 
 
 class Order(models.Model):
