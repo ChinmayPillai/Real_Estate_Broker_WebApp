@@ -7,6 +7,9 @@ class Property(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
 
+    def __str__(self):
+        return self.name
+
 
 class UserProfile(models.Model):
     name = models.CharField(max_length=100)
@@ -18,6 +21,9 @@ class UserProfile(models.Model):
     portfolio = models.ManyToManyField(Property, related_name='portfolio')
     watchlist = models.ManyToManyField(Property, related_name='watchlist')
 
+    def __str__(self):
+        return self.name
+
 
 class Order(models.Model):
     ORDER_TYPES = (
@@ -28,6 +34,9 @@ class Order(models.Model):
     prop = models.ForeignKey(Property, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     order_type = models.CharField(max_length=4, choices=ORDER_TYPES)
+
+    def __str__(self):
+        return f'{self.order_type} Order for {self.prop.name} at {self.price}'
 
 
 class BuyOrderManager(models.Manager):
