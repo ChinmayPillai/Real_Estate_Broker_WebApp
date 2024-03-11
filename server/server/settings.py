@@ -28,6 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+AUTH_USER_MODEL = 'api.UserProfile'
+
 # Application definition
 
 INSTALLED_APPS = [

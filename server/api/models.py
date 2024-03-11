@@ -1,28 +1,31 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
 
 class Property(models.Model):
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000, blank=True)
 
     def __str__(self):
         return self.name
 
 
-class UserProfile(models.Model):
+class UserProfile(AbstractUser):
+
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
-    password = models.CharField(max_length=100)
-    funds = models.PositiveIntegerField()
-    money_invested = models.PositiveIntegerField()
-    pnl = models.IntegerField()
-    portfolio = models.ManyToManyField(Property, related_name='portfolio')
-    watchlist = models.ManyToManyField(Property, related_name='watchlist')
+    funds = models.PositiveIntegerField(default=0)
+    money_invested = models.PositiveIntegerField(default=0)
+    pnl = models.IntegerField(default=0)
+    portfolio = models.ManyToManyField(Property, related_name='portfolio', default=[], blank=True)
+    watchlist = models.ManyToManyField(Property, related_name='watchlist', default=[], blank=True)
+
+    REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.name
+        return self.name or self.username
 
 
 class Order(models.Model):
