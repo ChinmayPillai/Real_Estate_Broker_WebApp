@@ -40,28 +40,3 @@ class Order(models.Model):
 
     def __str__(self):
         return f'{self.order_type} Order for {self.prop.name} at {self.price}'
-
-
-class BuyOrderManager(models.Manager):
-    """
-    Custom manager for filtering and sorting buy orders by price (ascending).
-    """
-    def get_queryset(self):
-        return super().get_queryset().filter(prop=self.model.prop, order_type=Order.ORDER_TYPES[0][0]).order_by('-price')
-
-
-class SellOrderManager(models.Manager):
-    """
-    Custom manager for filtering and sorting sell orders by price (descending).
-    """
-    def get_queryset(self):
-        return super().get_queryset().filter(prop=self.model.prop, order_type=Order.ORDER_TYPES[1][0]).order_by('price')
-
-
-
-class OrderBook(models.Model):
-    prop = models.ForeignKey(Property, on_delete=models.CASCADE)
-
-    # Use a Manager to filter and sort orders by type
-    buy_orders = BuyOrderManager()
-    sell_orders = SellOrderManager()
