@@ -27,6 +27,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/property/:propertyId" element={<Property />} />
         </Routes>
       </div>
 

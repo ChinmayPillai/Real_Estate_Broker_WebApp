@@ -12,44 +12,71 @@ import {
 import "./Home.css";
 import Intro from "./Intro";
 import propertyimg from "./prop.webp";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [count, setCount] = useState(0);
+
+  const PropertyComponent = () => {
+    const [propertie, setProperties] = useState([]);
+
+    useEffect(() => {
+      const fetchProperties = async () => {
+        try {
+          const response = await fetch("/api/property");
+          if (!response.ok) {
+            throw new Error("Failed to fetch properties");
+          }
+          const data = await response.json();
+          setProperties(data.properties);
+        } catch (error) {
+          console.error("Error fetching properties:", error);
+        }
+      };
+
+      fetchProperties();
+
+      return () => {
+        // Cleanup code
+      };
+    }, []);
+  };
+
   const properties = [
     {
       id: 1,
       image: "property1.jpg",
-      type: "Apartment",
+      category: "Apartment",
       location: "New York",
-      price: "$500,000",
+      ltp: "$500,000",
     },
     {
       id: 2,
       image: "property2.jpg",
-      type: "House",
+      category: "House",
       location: "Los Angeles",
-      price: "$750,000",
+      ltp: "$750,000",
     },
     {
       id: 3,
       image: "property3.jpg",
-      type: "Condo",
+      category: "Condo",
       location: "Chicago",
-      price: "$400,000",
+      ltp: "$400,000",
     },
     {
       id: 4,
       image: "property1.jpg",
-      type: "Apartment",
+      category: "Apartment",
       location: "New York",
-      price: "$500,000",
+      ltp: "$500,000",
     },
     {
       id: 5,
       image: "property2.jpg",
-      type: "House",
+      category: "House",
       location: "Los Angeles",
-      price: "$750,000",
+      ltp: "$750,000",
     },
     {
       id: 6,
@@ -85,7 +112,7 @@ export default function Home() {
                     component="img"
                     height="200"
                     image={propertyimg}
-                    alt={property.type}
+                    alt={property.category}
                     sx={{
                       padding: "10px",
                       boxSizing: "border-box",
@@ -94,18 +121,20 @@ export default function Home() {
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                      {property.type}
+                      {property.category}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       Location: {property.location}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Price: {property.price}
+                      Price: {property.ltp}
                     </Typography>
                   </CardContent>
                 </CardActionArea>
                 <Button
                   size="small"
+                  component={Link}
+                  to={`/property/${property.id}`}
                   color="primary"
                   className="list-item-button"
                 >
