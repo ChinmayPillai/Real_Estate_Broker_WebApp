@@ -9,38 +9,46 @@
   
   .property-content {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    align-items: flex-start;
-    padding-top: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
-    /* background-color: lightgreen; */
+    align-items: center;
   }
-
+  
   .property-content .property-image {
-    align-items: flex-start;
-    padding-top: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
-    background-color: lightblue;
+    flex: 1 1 40%;
+    max-width: 100%;
+    padding: 2%;
+    justify-content: center;
+    align-items: center;
+    background-color: #98eff2;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
   }
   
   .property-details {
-    flex: 1;
-    padding-right: 20px;
+    flex: 1 1 60%;
+    padding: 20px;
+    background-color:#98eff2;
+    border-radius: 5px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.556);
   }
   
   .property-buttons {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: flex;
     align-items: flex;
+    margin-top: 10px;
     padding-left: 80px;
   }
-  
+   
   .property-buttons .buy-button {
+    margin-bottom: 10px;
+  }
+
+  .property-buttons .wishlist-button {
     margin-bottom: 10px;
   }
   
@@ -52,5 +60,4 @@
   .Table{
     border: #333;
     background-color: #c6f592;
-    padding-top: 5%;
   }

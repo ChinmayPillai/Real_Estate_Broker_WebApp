@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
+import logo from "./logo.jpg";
 
 const Navbar = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -24,9 +25,16 @@ const Navbar = () => {
   return (
     <AppBar position="sticky" sx={{ background: "#007bff", color: "#ffffff" }}>
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Real Estate Broker
-        </Typography>
+      <img src={logo} alt="logo" background-color="#98eff2" style={{width: '100px', height: '100px'}} />
+      <Typography variant="h4" component="div" sx={{
+      flexGrow: 1,
+      fontWeight: 600,
+      textAlign: 'left',
+      padding: '20px',
+      textTransform: 'uppercase', // Uppercase letters
+    }}>
+      Real Estate Broker
+    </Typography>
         <IconButton
           size="large"
           edge="start"
