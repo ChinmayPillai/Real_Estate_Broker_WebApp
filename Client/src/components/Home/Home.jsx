@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Container,
   Grid,
@@ -15,70 +15,30 @@ import propertyimg from "./prop.webp";
 import { Link } from "react-router-dom";
 
 export default function Home() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
 
-  const PropertyComponent = () => {
-    const [propertie, setProperties] = useState([]);
+  const [properties, setProperties] = useState([]);
 
-    useEffect(() => {
-      const fetchProperties = async () => {
-        try {
-          const response = await fetch("/api/property");
-          if (!response.ok) {
-            throw new Error("Failed to fetch properties");
-          }
-          const data = await response.json();
-          setProperties(data.properties);
-        } catch (error) {
-          console.error("Error fetching properties:", error);
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/properties");
+        if (!response.ok) {
+          throw new Error("Failed to fetch properties");
         }
-      };
+        const data = await response.json();
+        setProperties(data.properties);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+      }
+    };
 
-      fetchProperties();
+    fetchProperties();
 
-      return () => {
-        // Cleanup code
-      };
-    }, []);
-  };
-
-  const properties = [
-    {
-      id: 1,
-      image: "property1.jpg",
-      category: "Apartment",
-      location: "New York",
-      ltp: "$500,000",
-    },
-    {
-      id: 2,
-      image: "property2.jpg",
-      category: "House",
-      location: "Los Angeles",
-      ltp: "$750,000",
-    },
-    {
-      id: 3,
-      image: "property3.jpg",
-      category: "Condo",
-      location: "Chicago",
-      ltp: "$400,000",
-    },
-    {
-      id: 4,
-      image: "property1.jpg",
-      category: "Apartment",
-      location: "New York",
-      ltp: "$500,000",
-    },
-    {
-      id: 5,
-      image: "property2.jpg",
-      category: "House",
-      location: "Los Angeles",
-      ltp: "$750,000",
-    },
-  ];
+    return () => {
+      // Cleanup code
+    };
+  }, []);
 
   const buyingContainerRef = useRef(null);
 
@@ -114,7 +74,10 @@ export default function Home() {
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                      {property.category}
+                      {property.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Category: {property.category}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       Location: {property.location}
