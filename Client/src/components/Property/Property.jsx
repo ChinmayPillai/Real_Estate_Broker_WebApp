@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
   Typography,
   Container,
@@ -19,19 +20,17 @@ import propertyimg from "./prop.webp";
 import "./Property.css"; // Import the CSS file for styling
 import BidButton from "./BidButton";
 
-
 function createData(buybid, sellbid) {
-    return { buybid, sellbid };
-  }
-  
+  return { buybid, sellbid };
+}
 
-  const rows = [
-    createData(24, 4.0),
-    createData(37, 4.3),
-    createData(24, 6.0),
-    createData(67, 4.3),
-    createData(49, 3.9),
-  ];
+const rows = [
+  createData(24, 4.0),
+  createData(37, 4.3),
+  createData(24, 6.0),
+  createData(67, 4.3),
+  createData(49, 3.9),
+];
 
 function BasicTable({ rows }) {
   // Sort rows by buybid in ascending order and sellbid in descending order
@@ -66,14 +65,17 @@ function BasicTable({ rows }) {
   );
 }
 
-export default function Property({ propertyId }) {
+export default function Property() {
+  const { propertyId } = useParams();
   const [property, setProperty] = useState(null);
 
   useEffect(() => {
     // Fetch property data from the server based on propertyId
     const fetchData = async () => {
       try {
-        const response = await fetch(`localhost:3000/api/properties/${propertyId}`);
+        const response = await fetch(
+          `localhost:3000/api/properties/${propertyId}`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch property");
         }
@@ -84,7 +86,8 @@ export default function Property({ propertyId }) {
         // Use default property values if fetch fails
         const defaultProperty = {
           title: "Property Title",
-          description: "Welcome to your dream home! Nestled in the heart of a vibrant community, this charming 3-bedroom, 2-bathroom haven boasts modern comforts and classic appeal. Step inside to discover an open-concept layout, perfect for entertaining guests or enjoying quiet evenings by the fireplace. The spacious kitchen features sleek countertops and stainless steel appliances. Retreat to the luxurious master suite with a spa-like ensuite bath and ample closet space. Outside, a serene backyard oasis awaits, ideal for summer BBQs. With top-rated schools and amenities just moments away, this is more than a home – it's a lifestyle. Don't miss your chance to make it yours!",
+          description:
+            "Welcome to your dream home! Nestled in the heart of a vibrant community, this charming 3-bedroom, 2-bathroom haven boasts modern comforts and classic appeal. Step inside to discover an open-concept layout, perfect for entertaining guests or enjoying quiet evenings by the fireplace. The spacious kitchen features sleek countertops and stainless steel appliances. Retreat to the luxurious master suite with a spa-like ensuite bath and ample closet space. Outside, a serene backyard oasis awaits, ideal for summer BBQs. With top-rated schools and amenities just moments away, this is more than a home – it's a lifestyle. Don't miss your chance to make it yours!",
           price: "$0",
           image: propertyimg,
         };
@@ -98,7 +101,8 @@ export default function Property({ propertyId }) {
       // Default property object if no propertyId is passed
       const defaultProperty = {
         title: "Property Title",
-        description: "Welcome to your dream home! Nestled in the heart of a vibrant community, this charming 3-bedroom, 2-bathroom haven boasts modern comforts and classic appeal. Step inside to discover an open-concept layout, perfect for entertaining guests or enjoying quiet evenings by the fireplace. The spacious kitchen features sleek countertops and stainless steel appliances. Retreat to the luxurious master suite with a spa-like ensuite bath and ample closet space. Outside, a serene backyard oasis awaits, ideal for summer BBQs. With top-rated schools and amenities just moments away, this is more than a home – it's a lifestyle. Don't miss your chance to make it yours!",
+        description:
+          "Welcome to your dream home! Nestled in the heart of a vibrant community, this charming 3-bedroom, 2-bathroom haven boasts modern comforts and classic appeal. Step inside to discover an open-concept layout, perfect for entertaining guests or enjoying quiet evenings by the fireplace. The spacious kitchen features sleek countertops and stainless steel appliances. Retreat to the luxurious master suite with a spa-like ensuite bath and ample closet space. Outside, a serene backyard oasis awaits, ideal for summer BBQs. With top-rated schools and amenities just moments away, this is more than a home – it's a lifestyle. Don't miss your chance to make it yours!",
         price: "$0",
         image: propertyimg,
       };
@@ -125,7 +129,11 @@ export default function Property({ propertyId }) {
             Market Order Buy
           </Button>
           <BidButton />
-          <Button variant="outlined" color="primary" className="wishlist-button">
+          <Button
+            variant="outlined"
+            color="primary"
+            className="wishlist-button"
+          >
             Add to Wishlist
           </Button>
           <BasicTable rows={rows} />
