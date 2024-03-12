@@ -25,16 +25,25 @@ const Navbar = () => {
   return (
     <AppBar position="sticky" sx={{ background: "#007bff", color: "#ffffff" }}>
       <Toolbar>
-      <img src={logo} alt="logo" background-color="#98eff2" style={{width: '100px', height: '100px'}} />
-      <Typography variant="h4" component="div" sx={{
-      flexGrow: 1,
-      fontWeight: 600,
-      textAlign: 'left',
-      padding: '20px',
-      textTransform: 'uppercase', // Uppercase letters
-    }}>
-      Real Estate Broker
-    </Typography>
+        <img
+          src={logo}
+          alt="logo"
+          background-color="#98eff2"
+          style={{ width: "80px", height: "80px" }}
+        />
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{
+            flexGrow: 1,
+            fontWeight: 600,
+            textAlign: { xs: "center", sm: "center", md: "left" },
+            padding: "20px",
+            textTransform: "uppercase", // Uppercase letters
+          }}
+        >
+          Real Estate Broker
+        </Typography>
         <IconButton
           size="large"
           edge="start"

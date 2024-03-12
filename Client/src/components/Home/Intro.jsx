@@ -17,7 +17,7 @@ const HomeBuySection = ({ scrollToBuyingContainer }) => {
   // Function to handle the button click event
   const scrollToAboutUs = () => {
     window.scrollTo({
-      top: AboutUSContainerRef.current.offsetTop - 65,
+      top: AboutUSContainerRef.current.offsetTop - 80,
       behavior: "smooth",
     });
     // buyingContainerRef.current.scrollIntoView({ behavior: 'smooth' });
