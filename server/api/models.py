@@ -6,7 +6,11 @@ from django.contrib.auth.models import AbstractUser
 
 class Property(models.Model):
     name = models.CharField(max_length=100)
+    category = models.CharField(max_length=100, blank=True)
     description = models.CharField(max_length=1000, blank=True)
+    location = models.CharField(max_length=100, blank=True)
+    #Latest Traded Price
+    ltp = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.name
@@ -16,6 +20,7 @@ class UserProfile(AbstractUser):
 
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
+    phone = models.CharField(max_length=10)
     funds = models.PositiveIntegerField(default=0)
     money_invested = models.PositiveIntegerField(default=0)
     pnl = models.IntegerField(default=0)
