@@ -78,13 +78,6 @@ export default function Home() {
       location: "Los Angeles",
       ltp: "$750,000",
     },
-    {
-      id: 6,
-      image: "property3.jpg",
-      type: "Condo",
-      location: "Chicago",
-      price: "$400,000",
-    },
   ];
 
   const buyingContainerRef = useRef(null);
