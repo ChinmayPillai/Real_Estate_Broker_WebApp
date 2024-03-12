@@ -46,3 +46,10 @@ def buy_orders(request, id):
     serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)
 
+
+# API to get best (lowest) 5 sell orders for a specific property
+@api_view(['GET'])
+def sell_orders(request, id):
+    orders = Order.objects.filter(prop=id, order_type='sell').order_by('price')[:5]
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
