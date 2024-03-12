@@ -20,6 +20,7 @@ class UserProfile(AbstractUser):
 
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
+    phone = models.CharField(max_length=10)
     funds = models.PositiveIntegerField(default=0)
     money_invested = models.PositiveIntegerField(default=0)
     pnl = models.IntegerField(default=0)
