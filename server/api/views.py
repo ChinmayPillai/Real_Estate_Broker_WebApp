@@ -2,15 +2,18 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .models import Property
-from .serializers import PropertySerializer
+from .models import Property, Order
+from .serializers import PropertySerializer, OrderSerializer
 
+# API to get All Properties
 @api_view(['GET'])
 def property(request):
     property = Property.objects.all()
     serializer = PropertySerializer(property, many=True)
     return Response({"properties": serializer.data})
 
+
+# API to get, update and delete Property by ID
 @api_view(['GET', 'PUT', 'DELETE'])
 def property_by_id(request, id):
 
@@ -34,3 +37,12 @@ def property_by_id(request, id):
     elif request.method == 'DELETE':
         property.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# API to get best (highest) 5 buy orders for a specific property
+@api_view(['GET'])
+def buy_orders(request, id):
+    orders = Order.objects.filter(prop=id, order_type='buy').order_by('-price')[:5]
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
+
