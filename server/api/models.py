@@ -6,7 +6,11 @@ from django.contrib.auth.models import AbstractUser
 
 class Property(models.Model):
     name = models.CharField(max_length=100)
+    category = models.CharField(max_length=100, blank=True)
     description = models.CharField(max_length=1000, blank=True)
+    location = models.CharField(max_length=100, blank=True)
+    #Latest Traded Price
+    ltp = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.name
