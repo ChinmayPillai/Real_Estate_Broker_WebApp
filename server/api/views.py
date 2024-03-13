@@ -85,3 +85,39 @@ def funds(request, id):
         user.save()
         return Response({"funds": user.funds})
 
+
+@api_view(['GET', 'PUT'])
+def watchlist(request, id):
+    try:
+        user = UserProfile.objects.get(id=id)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        return Response({"watchlist": user.watchlist})
+    
+    elif request.method == 'PUT':
+        action = request.data.get('action')
+        if action is None:
+            return Response({"error": "action field is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        property_id = request.data.get('property_id')
+        if property_id is None:
+            return Response({"error": "property_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if action == 'add':            
+            if user.watchlist is None:
+                user.watchlist = [property_id]
+            elif property_id not in user.watchlist:
+                user.watchlist.append(property_id)
+        
+        elif action == 'remove':
+            if user.watchlist is not None and property_id in user.watchlist:
+                user.watchlist.remove(property_id)
+        else:
+            return Response({"error": "Invalid action. Please use 'add' or 'remove'"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user.save()
+        return Response({"watchlist": user.watchlist})
+

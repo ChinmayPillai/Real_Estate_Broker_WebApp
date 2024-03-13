@@ -25,7 +25,7 @@ class UserProfile(AbstractUser):
     money_invested = models.PositiveIntegerField(default=0)
     pnl = models.IntegerField(default=0)
     portfolio = models.ManyToManyField(Property, related_name='portfolio', default=[], blank=True)
-    watchlist = models.ManyToManyField(Property, related_name='watchlist', default=[], blank=True)
+    watchlist = models.JSONField(null=True, blank=True, default=list)
 
     REQUIRED_FIELDS = []
 
