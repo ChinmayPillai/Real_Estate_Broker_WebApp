@@ -8,4 +8,5 @@ urlpatterns = [
     path('orders/sell/<int:id>', views.sell_orders),
     path('funds/<int:id>', views.funds),
     path('watchlist/<int:id>', views.watchlist),
+    path('portfolio/<int:id>', views.portfolio),
 ]

@@ -86,6 +86,7 @@ def funds(request, id):
         return Response({"funds": user.funds})
 
 
+# API to get/add/remove properties from user watchlist
 @api_view(['GET', 'PUT'])
 def watchlist(request, id):
     try:
@@ -120,4 +121,42 @@ def watchlist(request, id):
         
         user.save()
         return Response({"watchlist": user.watchlist})
+
+
+
+# API to get/add/remove properties from user portfolio
+@api_view(['GET', 'PUT'])
+def portfolio(request, id):
+    try:
+        user = UserProfile.objects.get(id=id)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        return Response({"portfolio": user.portfolio})
+    
+    elif request.method == 'PUT':
+        action = request.data.get('action')
+        if action is None:
+            return Response({"error": "action field is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        property_id = request.data.get('property_id')
+        if property_id is None:
+            return Response({"error": "property_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if action == 'add':            
+            if user.portfolio is None:
+                user.portfolio = [property_id]
+            elif property_id not in user.portfolio:
+                user.portfolio.append(property_id)
+        
+        elif action == 'remove':
+            if user.portfolio is not None and property_id in user.portfolio:
+                user.portfolio.remove(property_id)
+        else:
+            return Response({"error": "Invalid action. Please use 'add' or 'remove'"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user.save()
+        return Response({"portfolio": user.portfolio})
 
