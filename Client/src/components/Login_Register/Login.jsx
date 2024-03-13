@@ -97,10 +97,15 @@ export default function SignIn() {
             >
               Sign In
             </Button>
-            <Grid container>
+            <Grid container sx={{ flexDirection: "column" }}>
               <Grid item>
                 <Link component={LinkRoute} to="/signup" variant="body2">
                   Don't have an account? Sign Up
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="http://localhost:8000/admin" variant="body2">
+                  Login as Admin instead
                 </Link>
               </Grid>
             </Grid>
