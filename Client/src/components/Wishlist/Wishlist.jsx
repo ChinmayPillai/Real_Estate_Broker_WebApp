@@ -20,6 +20,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Link } from "react-router-dom";
 import { Select, MenuItem } from "@mui/material";
+import "./Wishlist.css";
 
 // Sample dictionary of products
 const sampleProducts = [
@@ -29,7 +30,7 @@ const sampleProducts = [
     category: "Category A",
     location: "Location A",
     description: "Description for Product 1",
-    price: 10,
+    ltp: 10,
   },
   {
     id: 2,
@@ -37,7 +38,7 @@ const sampleProducts = [
     category: "Category B",
     location: "Location B",
     description: "Description for Product 2",
-    price: 20,
+    ltp: 20,
   },
   {
     id: 3,
@@ -45,7 +46,7 @@ const sampleProducts = [
     category: "Category C",
     location: "Location C",
     description: "Description for Product 3",
-    price: 30,
+    ltp: 30,
   },
   {
     id: 4,
@@ -53,7 +54,7 @@ const sampleProducts = [
     category: "Category D",
     location: "Location D",
     description: "Description for Product 4",
-    price: 40,
+    ltp: 40,
   },
   {
     id: 5,
@@ -61,14 +62,39 @@ const sampleProducts = [
     category: "Category E",
     location: "Location E",
     description: "Description for Product 5",
-    price: 50,
+    ltp: 50,
   },
 ];
 
-export default function Wishlist() {
+export default function Wishlist({ defaultValue = "Wishlist" }) {
+  const [sample, setSample] = useState([]);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/properties");
+        if (!response.ok) {
+          throw new Error("Failed to fetch properties");
+        }
+        const data = await response.json();
+        setSample(data.properties);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+      }
+    };
+
+    fetchProperties();
+
+    return () => {
+      // Cleanup code
+    };
+  }, []);
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [rows, setRows] = useState(sampleProducts); // Use the sample products directly
+  const [rows, setRows] = useState(
+    defaultValue == "Wishlist" ? sampleProducts : sample
+  ); // Use the sample products directly
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -96,7 +122,7 @@ export default function Wishlist() {
       }
     });
   };
-  const [selectedOption, setSelectedOption] = useState("Wishlist");
+  const [selectedOption, setSelectedOption] = useState(defaultValue);
 
   return (
     <>
@@ -106,6 +132,9 @@ export default function Wishlist() {
             value={selectedOption}
             onChange={(event) => {
               setSelectedOption(event.target.value);
+              setRows(
+                event.target.value == "Wishlist" ? sampleProducts : sample
+              );
             }}
             displayEmpty
             sx={{
@@ -165,12 +194,14 @@ export default function Wishlist() {
                   >
                     Price
                   </TableCell>
-                  <TableCell
-                    align="left"
-                    style={{ minWidth: "50px", fontWeight: "bold" }}
-                  >
-                    Action
-                  </TableCell>
+                  {selectedOption != "Portfolio" && (
+                    <TableCell
+                      align="left"
+                      style={{ minWidth: "50px", fontWeight: "bold" }}
+                    >
+                      Action
+                    </TableCell>
+                  )}
                 </TableRow>
               </TableHead>
 
@@ -194,21 +225,22 @@ export default function Wishlist() {
                         </TableCell>
                         <TableCell align="left">{row.category}</TableCell>
                         <TableCell align="left">{row.location}</TableCell>
-                        <TableCell align="left">{row.price}</TableCell>
-                        <TableCell align="left">
-                          {/* <Stack spacing={1} direction="row"> */}
-                          <DeleteIcon
-                            style={{
-                              fontSize: "20px",
-                              color: "darkred",
-                              cursor: "pointer",
-                            }}
-                            onClick={() => {
-                              deleteUser(row.id);
-                            }}
-                          />
-                          {/* </Stack> */}
-                        </TableCell>
+                        <TableCell align="left">{row.ltp}</TableCell>
+                        {selectedOption != "Portfolio" && (
+                          <TableCell align="left">
+                            {/* <Stack spacing={1} direction="row"> */}
+                            <DeleteIcon
+                              style={{
+                                fontSize: "20px",
+                                color: "darkred",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => {
+                                deleteUser(row.id);
+                              }}
+                            />
+                          </TableCell>
+                        )}
                       </TableRow>
                     );
                   })}
