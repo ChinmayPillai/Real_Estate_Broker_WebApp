@@ -24,7 +24,12 @@ const Navbar = () => {
 
   return (
     <AppBar position="sticky" sx={{ background: "#007bff", color: "#ffffff" }}>
-      <Toolbar>
+      <Toolbar
+        sx={{
+          display: { xs: "flex" },
+          justifyContent: { xs: "space-between" },
+        }}
+      >
         <img
           src={logo}
           alt="logo"
@@ -35,6 +40,7 @@ const Navbar = () => {
           variant="h6"
           component="div"
           sx={{
+            display: { xs: "none", sm: "block" },
             flexGrow: 1,
             fontWeight: 600,
             textAlign: { xs: "center", sm: "center", md: "left" },

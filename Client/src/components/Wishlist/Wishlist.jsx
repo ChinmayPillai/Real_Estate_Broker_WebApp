@@ -18,43 +18,50 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import { Link } from "react-router-dom";
+import { Select, MenuItem } from "@mui/material";
 
 // Sample dictionary of products
 const sampleProducts = [
   {
     id: 1,
     name: "Product 1",
-    price: 10,
     category: "Category A",
-    date: "2024-03-13",
+    location: "Location A",
+    description: "Description for Product 1",
+    price: 10,
   },
   {
     id: 2,
     name: "Product 2",
-    price: 20,
     category: "Category B",
-    date: "2024-03-14",
+    location: "Location B",
+    description: "Description for Product 2",
+    price: 20,
   },
   {
     id: 3,
     name: "Product 3",
-    price: 30,
     category: "Category C",
-    date: "2024-03-15",
+    location: "Location C",
+    description: "Description for Product 3",
+    price: 30,
   },
   {
     id: 4,
     name: "Product 4",
-    price: 40,
     category: "Category D",
-    date: "2024-03-16",
+    location: "Location D",
+    description: "Description for Product 4",
+    price: 40,
   },
   {
     id: 5,
     name: "Product 5",
-    price: 50,
     category: "Category E",
-    date: "2024-03-17",
+    location: "Location E",
+    description: "Description for Product 5",
+    price: 50,
   },
 ];
 
@@ -89,63 +96,84 @@ export default function Wishlist() {
       }
     });
   };
+  const [selectedOption, setSelectedOption] = useState("Wishlist");
 
   return (
     <>
       {rows.length > 0 && (
         <Paper sx={{ width: "98%", overflow: "hidden", padding: "12px" }}>
-          <Typography
-            gutterBottom
-            variant="h5"
-            component="div"
-            sx={{ padding: "20px" }}
+          <Select
+            value={selectedOption}
+            onChange={(event) => {
+              setSelectedOption(event.target.value);
+            }}
+            displayEmpty
+            sx={{
+              fontSize: "20px", // Increase font size
+              fontWeight: "bold", // Use bold font weight
+              marginBottom: "20px", // Add margin to increase gap
+              "& .MuiSelect-select": {
+                padding: "10px", // Add padding for better appearance
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                border: "none", // Remove the border
+              },
+              "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                {
+                  border: "none", // Remove border on hover
+                },
+              "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                {
+                  border: "none", // Remove border on focus
+                },
+              "& .MuiInputBase-root": {
+                "&:hover": {
+                  borderColor: "transparent", // Remove border color on hover
+                },
+              },
+            }}
           >
-            Products List
-          </Typography>
+            <MenuItem value={"Wishlist"}>Wishlist</MenuItem>
+            <MenuItem value={"Portfolio"}>Portfolio</MenuItem>
+          </Select>
           <Divider />
-          <Box height={10} />
-          <Stack direction="row" spacing={2} className="my-2 mb-2">
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={rows}
-              sx={{ width: 300 }}
-              getOptionLabel={(option) => option.name || ""}
-              renderInput={(params) => (
-                <TextField {...params} size="small" label="Search Products" />
-              )}
-            />
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1 }}
-            ></Typography>
-            <Button variant="contained" endIcon={<AddCircleIcon />}>
-              Add
-            </Button>
-          </Stack>
-          <Box height={10} />
           <TableContainer>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="left" style={{ minWidth: "100px" }}>
+                  <TableCell
+                    align="left"
+                    style={{ minWidth: "100px", fontWeight: "bold" }}
+                  >
                     Name
                   </TableCell>
-                  <TableCell align="left" style={{ minWidth: "100px" }}>
-                    Price
-                  </TableCell>
-                  <TableCell align="left" style={{ minWidth: "100px" }}>
+                  <TableCell
+                    align="left"
+                    style={{ minWidth: "100px", fontWeight: "bold" }}
+                  >
                     Category
                   </TableCell>
-                  <TableCell align="left" style={{ minWidth: "100px" }}>
-                    Date
+                  <TableCell
+                    align="left"
+                    style={{ minWidth: "100px", fontWeight: "bold" }}
+                  >
+                    Location
                   </TableCell>
-                  <TableCell align="left" style={{ minWidth: "100px" }}>
+                  <TableCell
+                    align="left"
+                    style={{ minWidth: "100px", fontWeight: "bold" }}
+                  >
+                    Price
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    style={{ minWidth: "50px", fontWeight: "bold" }}
+                  >
                     Action
                   </TableCell>
                 </TableRow>
               </TableHead>
+
               <TableBody>
                 {rows
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -157,32 +185,29 @@ export default function Wishlist() {
                         tabIndex={-1}
                         key={row.id}
                       >
-                        <TableCell align="left">{row.name}</TableCell>
-                        <TableCell align="left">{row.price}</TableCell>
+                        <TableCell
+                          align="left"
+                          component={Link}
+                          to={`/property/${row.id}`}
+                        >
+                          {row.name}
+                        </TableCell>
                         <TableCell align="left">{row.category}</TableCell>
-                        <TableCell align="left">{row.date}</TableCell>
+                        <TableCell align="left">{row.location}</TableCell>
+                        <TableCell align="left">{row.price}</TableCell>
                         <TableCell align="left">
-                          <Stack spacing={2} direction="row">
-                            <EditIcon
-                              style={{
-                                fontSize: "20px",
-                                color: "blue",
-                                cursor: "pointer",
-                              }}
-                              className="cursor-pointer"
-                              // onClick={() => editUser(row.id)}
-                            />
-                            <DeleteIcon
-                              style={{
-                                fontSize: "20px",
-                                color: "darkred",
-                                cursor: "pointer",
-                              }}
-                              onClick={() => {
-                                deleteUser(row.id);
-                              }}
-                            />
-                          </Stack>
+                          {/* <Stack spacing={1} direction="row"> */}
+                          <DeleteIcon
+                            style={{
+                              fontSize: "20px",
+                              color: "darkred",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              deleteUser(row.id);
+                            }}
+                          />
+                          {/* </Stack> */}
                         </TableCell>
                       </TableRow>
                     );
