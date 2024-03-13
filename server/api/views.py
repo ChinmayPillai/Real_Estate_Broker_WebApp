@@ -1,9 +1,9 @@
 from rest_framework.response import Response
-from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .models import Property, Order
-from .serializers import PropertySerializer, OrderSerializer
+from .models import Property, Order, UserProfile
+from .serializers import PropertySerializer, OrderSerializer, UserProfileSerializer
+
 
 # API to get All Properties
 @api_view(['GET'])
@@ -53,3 +53,35 @@ def sell_orders(request, id):
     orders = Order.objects.filter(prop=id, order_type='sell').order_by('price')[:5]
     serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)
+
+# API to get/update user funds
+@api_view(['GET', 'PUT'])
+def funds(request, id):
+    try:
+        user = UserProfile.objects.get(id=id)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        return Response({"funds": user.funds})
+    
+    elif request.method == 'PUT':
+        action = request.data.get('action')
+        amount = request.data.get('amount')
+        if amount is None:
+            return Response({"error": "'amount' field is required"}, status=status.HTTP_400_BAD_REQUEST)
+        if action is None:
+            return Response({"error": "'action' field is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+        if action == 'add':
+            user.funds += request.data.get('amount')
+        elif action == 'withdraw':
+            user.funds -= request.data.get('amount')
+        else:
+            return Response({"error": "Invalid action. Please use 'add' or 'withdraw'"}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+        user.save()
+        return Response({"funds": user.funds})
+
