@@ -54,6 +54,7 @@ def sell_orders(request, id):
     serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)
 
+
 # API to get/update user funds
 @api_view(['GET', 'PUT'])
 def funds(request, id):
@@ -163,6 +164,7 @@ def portfolio(request, id):
         return Response({"portfolio": user.portfolio})
     
 
+# API to place Market Order
 @api_view(['PUT'])
 def marketOrder(request):
 
@@ -247,4 +249,51 @@ def marketOrder(request):
         return Response({"error": "Invalid action. Please use 'buy' or 'sell'"}, status=status.HTTP_400_BAD_REQUEST)
     
     return Response({"funds": user.funds, "portfolio": user.portfolio})
+
+
+# API to place Limit Order
+@api_view(['POST'])
+def limitOrder(request):
+    
+        action = request.data.get('action')
+        if action is None:
+            return Response({"error": "action field is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user_id = request.data.get('user_id')
+        if user_id is None:
+            return Response({"error": "user_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        property_id = request.data.get('property_id')
+        if property_id is None:
+            return Response({"error": "property_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        price = request.data.get('price')
+        if price is None:
+            return Response({"error": "price field is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = UserProfile.objects.get(id=user_id)
+        except UserProfile.DoesNotExist:
+            return Response({"error": "Invalid User Id"}, status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+            property = Property.objects.get(id=property_id)
+        except Property.DoesNotExist:
+            return Response({"error": "Invalid Property Id"}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Making the assumption that user won't use up the funds in the time between order placement and execution
+        if action == 'buy':
+            if user.funds < price:
+                return Response({"error": "Insufficient funds"}, status=status.HTTP_400_BAD_REQUEST)  
+        elif action == 'sell':
+            if property_id not in user.portfolio:
+                return Response({"error": "Property not in portfolio"}, status=status.HTTP_400_BAD_REQUEST)            
+        else:
+            return Response({"error": "Invalid action. Please use 'buy' or 'sell'"}, status=status.HTTP_400_BAD_REQUEST)
+        
+                    
+        order = Order(user=user, prop=property, price=price, order_type=action)
+        order.save()
+
+        return Response({"funds": user.funds, "portfolio": user.portfolio})
 

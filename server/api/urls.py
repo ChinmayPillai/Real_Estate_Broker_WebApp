@@ -10,4 +10,5 @@ urlpatterns = [
     path('watchlist/<int:id>', views.watchlist),
     path('portfolio/<int:id>', views.portfolio),
     path('marketorder', views.marketOrder),
+    path('limitorder', views.limitOrder),
 ]
