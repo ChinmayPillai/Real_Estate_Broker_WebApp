@@ -208,8 +208,10 @@ def marketOrder(request):
             user.portfolio = []
         user.portfolio.append(property_id)
         seller.portfolio.remove(property_id)
+        property.ltp = price
         user.save()
         seller.save()
+        property.save()
         
         order.delete()
         
@@ -234,8 +236,10 @@ def marketOrder(request):
         if seller.portfolio is None:
             seller.portfolio = []
         seller.portfolio.append(property_id)
+        property.ltp = price
         user.save()
         seller.save()
+        property.save()
         
         order.delete()
 
