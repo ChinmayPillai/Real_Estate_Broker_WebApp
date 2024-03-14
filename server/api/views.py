@@ -161,4 +161,86 @@ def portfolio(request, id):
         
         user.save()
         return Response({"portfolio": user.portfolio})
+    
+
+@api_view(['PUT'])
+def marketOrder(request):
+
+    action = request.data.get('action')
+    if action is None:
+        return Response({"error": "action field is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    user_id = request.data.get('user_id')
+    if user_id is None:
+        return Response({"error": "user_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    property_id = request.data.get('property_id')
+    if property_id is None:
+        return Response({"error": "property_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        user = UserProfile.objects.get(id=user_id)
+    except UserProfile.DoesNotExist:
+        return Response({"error": "Invalid User Id"}, status=status.HTTP_404_NOT_FOUND)
+    
+    try:
+        property = Property.objects.get(id=property_id)
+    except Property.DoesNotExist:
+        return Response({"error": "Invalid Property Id"}, status=status.HTTP_404_NOT_FOUND)
+    
+    if action == 'buy':
+        orders = Order.objects.filter(prop=property_id, order_type='sell').order_by('price')
+        if orders is None or orders.count() == 0:
+            return Response({"error": "No sell orders available for this property"}, status=status.HTTP_400_BAD_REQUEST)
+        order = orders[0]
+        price = order.price
+
+        seller = order.user
+
+        if user.funds < price:
+            return Response({"error": "Insufficient funds"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user.funds -= price
+        seller.funds += price
+        user.money_invested += price
+        # seller.money_invested -= price
+        if user.portfolio is None:
+            user.portfolio = []
+        user.portfolio.append(property_id)
+        seller.portfolio.remove(property_id)
+        user.save()
+        seller.save()
+        
+        order.delete()
+        
+    elif action == 'sell':
+        if property_id not in user.portfolio:
+            return Response({"error": "Property not in portfolio"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        orders = Order.objects.filter(prop=property_id, order_type='buy').order_by('-price')
+        if orders is None or orders.count() == 0:
+            return Response({"error": "No buy orders available for this property"}, status=status.HTTP_400_BAD_REQUEST)
+        order = orders[0]
+        price = order.price
+
+        seller = order.user
+
+        
+        user.funds += price
+        seller.funds -= price
+        # user.money_invested -= price
+        seller.money_invested += price
+        user.portfolio.remove(property_id)
+        if seller.portfolio is None:
+            seller.portfolio = []
+        seller.portfolio.append(property_id)
+        user.save()
+        seller.save()
+        
+        order.delete()
+
+    else:
+        return Response({"error": "Invalid action. Please use 'buy' or 'sell'"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    return Response({"funds": user.funds, "portfolio": user.portfolio})
 
