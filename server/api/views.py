@@ -75,9 +75,11 @@ def funds(request, id):
     
 
         if action == 'add':
-            user.funds += request.data.get('amount')
+            user.funds += amount
         elif action == 'withdraw':
-            user.funds -= request.data.get('amount')
+            if(amount > user.funds):
+                return Response({"error": "Insufficient funds"}, status=status.HTTP_400_BAD_REQUEST)
+            user.funds -= amount
         else:
             return Response({"error": "Invalid action. Please use 'add' or 'withdraw'"}, status=status.HTTP_400_BAD_REQUEST)
         
