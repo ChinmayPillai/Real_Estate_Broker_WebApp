@@ -1,13 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from .models import Property, Order
-from .serializers import PropertySerializer, OrderSerializer, RegisterSerializer
+from .models import Property, Order, UserProfile
+from .serializers import PropertySerializer, OrderSerializer, RegisterSerializer, UserProfileSerializer
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password
-from .models import UserProfile 
-
-
 
 
 # API to get All Properties
@@ -58,6 +55,7 @@ def sell_orders(request, id):
     orders = Order.objects.filter(prop=id, order_type='sell').order_by('price')[:5]
     serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)
+
 
 # API to register a new user
 @api_view(['POST'])
