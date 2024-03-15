@@ -2,8 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Property, Order, UserProfile
-from .serializers import PropertySerializer, OrderSerializer, RegisterSerializer, UserProfileSerializer
-from django.contrib.auth import authenticate
+from .serializers import PropertySerializer, OrderSerializer, RegisterSerializer
 from django.contrib.auth.hashers import check_password
 
 
