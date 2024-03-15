@@ -68,12 +68,6 @@ def register(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-
-from .models import UserProfile  # Assuming UserProfile is in the same directory as views.py
-from django.contrib.auth.hashers import check_password
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-
 @api_view(['POST'])
 def login(request):
     if request.method == 'POST':
