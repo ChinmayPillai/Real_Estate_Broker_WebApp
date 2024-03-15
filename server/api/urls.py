@@ -11,4 +11,6 @@ urlpatterns = [
     path('portfolio/<int:id>', views.portfolio),
     path('marketorder', views.marketOrder),
     path('limitorder', views.limitOrder),
+    path('register', views.register),
+    path('login/', views.login),
 ]

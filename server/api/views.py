@@ -2,7 +2,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Property, Order, UserProfile
-from .serializers import PropertySerializer, OrderSerializer, UserProfileSerializer
+from .serializers import PropertySerializer, OrderSerializer, RegisterSerializer, UserProfileSerializer
+from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import check_password
 
 
 # API to get All Properties
@@ -54,6 +56,45 @@ def sell_orders(request, id):
     serializer = OrderSerializer(orders, many=True)
     return Response(serializer.data)
 
+
+# API to register a new user
+@api_view(['POST'])
+def register(request):
+    if request.method == 'POST':
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+from .models import UserProfile  # Assuming UserProfile is in the same directory as views.py
+from django.contrib.auth.hashers import check_password
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@api_view(['POST'])
+def login(request):
+    if request.method == 'POST':
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        # Retrieve user by username
+        try:
+            user = UserProfile.objects.get(username=username)
+        except UserProfile.DoesNotExist:
+            # User not found
+            return Response({"message": "Invalid username or password"}, status=401)
+
+        # Check if the provided password matches the hashed password
+        if check_password(password, user.password):
+            # Passwords match, authentication successful
+            return Response({"message": "Login successful", "user": user.username}, status=200)
+        else:
+            # Passwords don't match, authentication failed
+            return Response({"message": "Invalid username or password"}, status=401)
+    
 
 # API to get/update user funds
 @api_view(['GET', 'PUT'])
