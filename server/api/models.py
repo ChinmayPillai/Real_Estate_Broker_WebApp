@@ -8,6 +8,7 @@ class Property(models.Model):
     name = models.CharField(max_length=100)
     category = models.CharField(max_length=100, blank=True)
     description = models.CharField(max_length=1000, blank=True)
+    image = models.CharField(max_length=1000, blank=True)
     location = models.CharField(max_length=100, blank=True)
     #Latest Traded Price
     ltp = models.DecimalField(max_digits=10, decimal_places=2)
@@ -24,8 +25,8 @@ class UserProfile(AbstractUser):
     funds = models.PositiveIntegerField(default=0)
     money_invested = models.PositiveIntegerField(default=0)
     pnl = models.IntegerField(default=0)
-    portfolio = models.ManyToManyField(Property, related_name='portfolio', default=[], blank=True)
-    watchlist = models.ManyToManyField(Property, related_name='watchlist', default=[], blank=True)
+    portfolio = models.JSONField(null=True, blank=True, default=list)
+    watchlist = models.JSONField(null=True, blank=True, default=list)
     pan = models.CharField(max_length=10, default='ABCDE1234F')
 
 
