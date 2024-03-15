@@ -26,7 +26,6 @@ class UserProfile(AbstractUser):
     pnl = models.IntegerField(default=0)
     portfolio = models.ManyToManyField(Property, related_name='portfolio', default=[], blank=True)
     watchlist = models.ManyToManyField(Property, related_name='watchlist', default=[], blank=True)
-    username = models.CharField(max_length=100, unique=True)
     pan = models.CharField(max_length=10, default='ABCDE1234F')
 
 

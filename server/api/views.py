@@ -97,6 +97,4 @@ def login(request):
         else:
             # Passwords don't match, authentication failed
             return Response({"message": "Invalid username or password"}, status=401)
-    else:
-        # Method not allowed
-        return Response({"message": "Only POST requests are allowed"}, status=405)
+    
