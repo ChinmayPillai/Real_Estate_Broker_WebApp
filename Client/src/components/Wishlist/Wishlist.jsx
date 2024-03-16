@@ -21,6 +21,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { Link } from "react-router-dom";
 import { Select, MenuItem } from "@mui/material";
 import "./Wishlist.css";
+import { useAuth } from "../Authorisation/Auth";
 
 // Sample dictionary of products
 const sampleProducts = [
@@ -67,6 +68,21 @@ const sampleProducts = [
 ];
 
 export default function Wishlist({ defaultValue = "Wishlist" }) {
+  const { isLoggedIn, userId } = useAuth();
+  const [dashboardData, setDashboardData] = useState(null);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      // Fetch dashboard data using userId
+      // Example fetch(`/api/dashboard/${userId}`)
+      // .then(response => response.json())
+      // .then(data => setDashboardData(data))
+      // .catch(error => console.error('Error fetching dashboard data:', error));
+    } else {
+      console.log("NOt fetched");
+    }
+  }, [isLoggedIn, userId]);
+
   const [sample, setSample] = useState([]);
 
   useEffect(() => {

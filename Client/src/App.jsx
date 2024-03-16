@@ -11,27 +11,30 @@ import Funds from "./components/Funds/Funds";
 import Login from "./components/Login_Register/Login";
 import SignUp from "./components/Login_Register/Signup";
 import { SingleBed } from "@mui/icons-material";
+import { AuthProvider } from "./components/Authorisation/Auth";
+import PrivateRoute from "./components/Authorisation/PrivateRoute";
 
 function App() {
   return (
     <>
-      <Navbar />
+      <AuthProvider>
+        <Navbar />
+        <div className="main-area">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/property" element={<Property />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/funds" element={<PrivateRoute component={Funds} />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/property/:propertyId" element={<Property />} />
+          </Routes>
+        </div>
 
-      <div className="main-area">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/property" element={<Property />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/funds" element={<Funds />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/support" element={<Support />} />
-          <Route path="/property/:propertyId" element={<Property />} />
-        </Routes>
-      </div>
-
-      <Footer />
+        <Footer />
+      </AuthProvider>
     </>
   );
 }
