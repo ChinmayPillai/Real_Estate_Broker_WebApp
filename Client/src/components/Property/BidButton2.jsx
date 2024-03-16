@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Popover from '@mui/material/Popover';
-import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -10,41 +7,18 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Swal from 'sweetalert2';
 
-const LimitBidButton = ({ userId, propertyId }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [bidAmount, setBidAmount] = useState('');
+const MarketBidButton = ({ bidAmount, userId, propertyId }) => {
   const [openDialog, setOpenDialog] = useState(false);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleDialogOpen = () => {
+    setOpenDialog(true);
   };
 
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
-
-  const handleBidChange = (event) => {
-    setBidAmount(event.target.value);
-  };
-
   const handleBidSubmit = async () => {
-    // Check if bidAmount is numeric
-    if (!/^\d+$/.test(bidAmount)) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid Input',
-        text: 'Please enter a valid numeric value for the bid amount.',
-      });
-      return;
-    }
-
     try {
       const response = await fetch('http://localhost:8000/api/marketorder', {
         method: 'PUT',
@@ -89,47 +63,14 @@ const LimitBidButton = ({ userId, propertyId }) => {
       handleDialogClose();
     };
   };
+  
 
   return (
     <div>
-      <Button style={{ width: '100%' }} variant="contained" color="primary" className="buy-button" onClick={handleClick}>
-        Limit Order Buy
+      <Button style={{ width: '100%' }} variant="contained" color="primary" className="buy-button" onClick={handleDialogOpen}>
+        Market Order Buy
       </Button>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <Box p={2}>
-          <TextField
-            label="Enter Bid Amount"
-            variant="outlined"
-            size="small"
-            value={bidAmount}
-            onChange={handleBidChange}
-            fullWidth
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleBidSubmit}
-            fullWidth
-            size="small"
-            style={{ marginTop: '10px' }}
-          >
-            Submit Bid
-          </Button>
-        </Box>
-      </Popover>
+
       {/* Dialog for confirmation */}
       <Dialog
         open={openDialog}
@@ -147,7 +88,7 @@ const LimitBidButton = ({ userId, propertyId }) => {
           <Button onClick={handleDialogClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleDialogClose} color="primary" autoFocus>
+          <Button onClick={handleBidSubmit} color="primary" autoFocus>
             Confirm
           </Button>
         </DialogActions>
@@ -156,5 +97,4 @@ const LimitBidButton = ({ userId, propertyId }) => {
   );
 };
 
-export default LimitBidButton;
-
+export default MarketBidButton;
