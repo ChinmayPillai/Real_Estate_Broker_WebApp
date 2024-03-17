@@ -12,31 +12,80 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link as LinkRoute } from "react-router-dom";
+import {
+  Link as LinkRoute,
+  redirect,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+import { useAuth } from "../Authorisation/Auth";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const { isLoggedIn, userId, login, logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const redirectTo = params.get("redirectTo");
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You want to Logout?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Logout!",
+      }).then((result) => {
+        if (result.value) {
+          logout();
+          navigate("/");
+          Swal.fire(
+            "Logged Out!",
+            "You have been successfully Logged out",
+            "success"
+          );
+        } else {
+          navigate(redirectTo || "/"); // Navigate back to the previous location
+        }
+      });
+    }
+  }, [isLoggedIn, location]);
+
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission behavior
-    const data = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
+    var object = {};
+    formData.forEach((value, key) => (object[key] = value));
 
     try {
       // Send form data to the API endpoint using fetch or any other HTTP client library
-      const response = await fetch("https://example.com/api/login", {
+      const response = await fetch("http://localhost:8000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(object),
       });
+      const userData = await response.json();
 
       if (response.ok) {
         // Handle successful response
+        login(userData.user);
         console.log("Login successful");
+        Swal.fire("Success!", "Login successful", "success");
+
+        navigate("/funds");
       } else {
         // Handle error response
-        console.error("Login failed");
+        console.error(userData.message);
+        event.target.reset();
+        Swal.fire("Error!", userData.message, "error");
       }
     } catch (error) {
       // Handle network errors
@@ -67,11 +116,10 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              type="email"
-              autoComplete="email"
+              id="username"
+              label="User Name"
+              name="username"
+              autoComplete="username"
               autoFocus
             />
             <TextField
@@ -82,13 +130,12 @@ export default function SignIn() {
               label="Password"
               id="password"
               type="password"
-              inputProps={{ minLength: 8, maxLength: 20 }}
               autoComplete="current-password"
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth
@@ -101,11 +148,6 @@ export default function SignIn() {
               <Grid item>
                 <Link component={LinkRoute} to="/signup" variant="body2">
                   Don't have an account? Sign Up
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="http://localhost:8000/admin" variant="body2">
-                  Login as Admin instead
                 </Link>
               </Grid>
             </Grid>

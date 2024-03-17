@@ -12,11 +12,16 @@ import {
   ListItemButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "./logo.jpg";
+import { useAuth } from "../Authorisation/Auth";
 
 const Navbar = () => {
+  const location = useLocation();
+  const prevLocation = location.pathname; // Get the previous location
+  // console.log(prevLocation);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const { isLoggedIn } = useAuth();
 
   const toggleDrawer = () => {
     setOpenDrawer(!openDrawer);
@@ -67,14 +72,14 @@ const Navbar = () => {
             </ListItemButton>
             <ListItemButton
               component={Link}
-              to="/portfolio"
+              to="user/Portfolio"
               onClick={toggleDrawer}
             >
               <ListItemText primary="Portfolio" />
             </ListItemButton>
             <ListItemButton
               component={Link}
-              to="/wishlist"
+              to={{ pathname: "/user/Wishlist" }}
               onClick={toggleDrawer}
             >
               <ListItemText primary="Wishlist" />
@@ -82,8 +87,14 @@ const Navbar = () => {
             <ListItemButton component={Link} to="/funds" onClick={toggleDrawer}>
               <ListItemText primary="Funds" />
             </ListItemButton>
-            <ListItemButton component={Link} to="/login" onClick={toggleDrawer}>
-              <ListItemText primary="Register/Login" />
+            <ListItemButton
+              component={Link}
+              to={`/login?redirectTo=${prevLocation}`}
+              onClick={toggleDrawer}
+            >
+              <ListItemText
+                primary={isLoggedIn ? "Logout" : "Register/Login"}
+              />
             </ListItemButton>
             <ListItemButton
               component={Link}
@@ -105,7 +116,7 @@ const Navbar = () => {
         <Button
           color="inherit"
           component={Link}
-          to="/portfolio"
+          to={{ pathname: "/user/Portfolio" }}
           sx={{ display: { xs: "none", md: "block" } }}
         >
           Portfolio
@@ -113,7 +124,7 @@ const Navbar = () => {
         <Button
           color="inherit"
           component={Link}
-          to="/wishlist"
+          to={{ pathname: "/user/Wishlist" }}
           sx={{ display: { xs: "none", md: "block" } }}
         >
           Wishlist
@@ -129,10 +140,10 @@ const Navbar = () => {
         <Button
           color="inherit"
           component={Link}
-          to="/login"
+          to={`/login?redirectTo=${prevLocation}`}
           sx={{ display: { xs: "none", md: "block" } }}
         >
-          Register/Login
+          {isLoggedIn ? "Logout" : "Register/Login"}
         </Button>
         <Button
           color="inherit"

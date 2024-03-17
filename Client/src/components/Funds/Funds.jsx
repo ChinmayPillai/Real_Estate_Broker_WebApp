@@ -10,13 +10,12 @@ import {
   DialogActions,
   DialogContentText,
 } from "@mui/material";
-
 export default function FundsPage() {
   const [currentFunds, setCurrentFunds] = useState(1000); // Initial funds amount
   const [amount, setAmount] = useState(""); // Input amount for add or withdraw
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogAction, setDialogAction] = useState("");
-  
+
   const handleOpenDialog = (action) => {
     setOpenDialog(true);
     setDialogAction(action);
@@ -35,7 +34,11 @@ export default function FundsPage() {
 
   const handleWithdrawFunds = () => {
     const withdrawAmount = parseFloat(amount);
-    if (!isNaN(withdrawAmount) && withdrawAmount > 0 && withdrawAmount <= currentFunds) {
+    if (
+      !isNaN(withdrawAmount) &&
+      withdrawAmount > 0 &&
+      withdrawAmount <= currentFunds
+    ) {
       handleOpenDialog("withdraw");
     }
   };
@@ -63,19 +66,31 @@ export default function FundsPage() {
         fullWidth
         sx={{ mb: 2 }}
       />
-      <Button variant="contained" color="primary" onClick={handleAddFunds} sx={{ mr: 2 }}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleAddFunds}
+        sx={{ mr: 2 }}
+      >
         Add Funds
       </Button>
-      <Button variant="contained" color="secondary" onClick={handleWithdrawFunds}>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleWithdrawFunds}
+      >
         Withdraw Funds
       </Button>
 
       {/* Confirmation Dialog */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>Confirm {dialogAction === "add" ? "Add Funds" : "Withdraw Funds"}</DialogTitle>
+        <DialogTitle>
+          Confirm {dialogAction === "add" ? "Add Funds" : "Withdraw Funds"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to {dialogAction === "add" ? "add" : "withdraw"} ${amount}?
+            Are you sure you want to{" "}
+            {dialogAction === "add" ? "add" : "withdraw"} ${amount}?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

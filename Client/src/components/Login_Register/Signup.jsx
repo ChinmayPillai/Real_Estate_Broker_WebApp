@@ -12,33 +12,55 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link as LinkRoute } from "react-router-dom";
+import { Link as LinkRoute, useNavigate } from "react-router-dom";
+import { useAuth } from "../Authorisation/Auth";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const { isLoggedIn, userId, login } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/login");
+    }
+  }, [isLoggedIn, navigate]);
+
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission behavior
-    const data = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
+    var object = {};
+    formData.forEach((value, key) => (object[key] = value));
+    console.log(object);
 
     try {
       // Send form data to the API endpoint using fetch or any other HTTP client library
-      const response = await fetch("https://example.com/api/signup", {
+      const response = await fetch("http://localhost:8000/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(object),
       });
+      const userData = await response.json();
 
       if (response.ok) {
         // Handle successful response
         console.log("Signup successful");
+        Swal.fire("Success!", "Signup successful", "success");
+
+        navigate("/login");
       } else {
         // Handle error response
-        console.error("Signup failed");
+        console.error(userData.username[0]);
+        event.target.reset();
+
+        Swal.fire("Error!", userData.username[0], "error");
       }
     } catch (error) {
       // Handle network errors
@@ -69,7 +91,7 @@ export default function SignUp() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="Name"
+                  name="name"
                   required
                   fullWidth
                   id="Name"
@@ -118,7 +140,7 @@ export default function SignUp() {
                   id="phoneNumber"
                   label="Phone Number"
                   type="tel" // Set the input type to 'tel' for phone numbers
-                  name="phoneNumber"
+                  name="phone"
                   autoComplete="tel"
                   inputProps={{ pattern: "[0-9]{10}" }} // Set the maximum length to 12 characters (adjust as needed)
                 />
@@ -144,7 +166,7 @@ export default function SignUp() {
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-start">
+            <Grid container justifyContent="center">
               <Grid item>
                 <Link component={LinkRoute} to="/login" variant="body2">
                   Already have an account? Sign in

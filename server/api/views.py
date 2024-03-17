@@ -83,7 +83,7 @@ def login(request):
         # Check if the provided password matches the hashed password
         if check_password(password, user.password):
             # Passwords match, authentication successful
-            return Response({"message": "Login successful", "user": user.username}, status=200)
+            return Response({"message": "Login successful", "user": user.id}, status=200)
         else:
             # Passwords don't match, authentication failed
             return Response({"message": "Invalid username or password"}, status=401)
