@@ -46,8 +46,8 @@ const LimitBidButton = ({ userId, propertyId }) => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/marketorder', {
-        method: 'PUT',
+      const response = await fetch('http://localhost:8000/api/limitorder', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -55,7 +55,7 @@ const LimitBidButton = ({ userId, propertyId }) => {
           action: 'buy',
           user_id: userId, // Replace with the actual user ID
           property_id: propertyId, // Replace with the actual property ID
-          bid_amount: bidAmount, // Send the bid amount to the API
+          price: bidAmount, // Send the bid amount to the API
         }),
       });
   
@@ -64,7 +64,7 @@ const LimitBidButton = ({ userId, propertyId }) => {
         // Handle JSON response
         Swal.fire({
           icon: 'success',
-          title: 'Market Order Buy Successful',
+          title: 'Limit Order Buy Successful',
           text: `Bid of ${bidAmount} submitted successfully!`,
         });
       } else {
@@ -72,12 +72,12 @@ const LimitBidButton = ({ userId, propertyId }) => {
         const errorText = await response.text();
         Swal.fire({
           icon: 'error',
-          title: 'Market Order Buy Failed',
+          title: 'Limit Order Buy Failed',
           text: `Failed to submit bid. Server error: ${errorText}`,
         });
       }
     } catch (error) {
-      console.error('Error placing Market Order:', error);
+      console.error('Error placing Limit Order:', error);
       // Show error message
       Swal.fire({
         icon: 'error',

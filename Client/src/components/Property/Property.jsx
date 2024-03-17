@@ -54,12 +54,13 @@ function BasicTable({ buyBids, sellBids }) {
 export default function Property() {
   const { propertyId } = useParams();
   const [property, setProperty] = useState(null);
+  const [userId, setUserId] = useState(1); // Replace with the actual user ID
   const [buyBids, setBuyBids] = useState([]);
   const [sellBids, setSellBids] = useState([]);
 
   const handleAddToWatchlist = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/watchlist/1', {
+      const response = await fetch(`http://localhost:8000/api/watchlist/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +88,7 @@ export default function Property() {
 
   const handleRemoveFromWatchlist = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/watchlist/1', {
+      const response = await fetch(`http://localhost:8000/api/watchlist/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -199,10 +200,10 @@ export default function Property() {
           className="property-image"
         />
         <div className="property-buttons">
-          <MarketBidButton bidAmount={property.ltp} userId={2} propertyId={propertyId}/>
-          <LimitBidButton userId={2} propertyId={propertyId}/>
-          <MarketSellButton bidAmount={property.ltp} userId={2} propertyId={propertyId}/>
-          <LimitSellButton userId={2} propertyId={propertyId}/>
+          <MarketBidButton bidAmount={property.ltp} userId={userId} propertyId={propertyId}/>
+          <LimitBidButton userId={userId} propertyId={propertyId}/>
+          <MarketSellButton bidAmount={property.ltp} userId={userId} propertyId={propertyId}/>
+          <LimitSellButton userId={userId} propertyId={propertyId}/>
           <Button
             variant="outlined"
             color="primary"

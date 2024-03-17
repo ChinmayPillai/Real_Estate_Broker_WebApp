@@ -1,431 +1,36 @@
-// import React, { useState } from 'react';
-// import { Typography, Grid, Button, TextField, Popover, Box } from '@mui/material';
-// import bgPic from "./bg_pic.jpg"; // Import the image
-// import { red } from '@mui/material/colors';
-
-// const FundsPage = () => {
-//   const [currentFunds, setCurrentFunds] = useState(1000); // Initial funds
-//   const [addAmount, setAddAmount] = useState('');
-//   const [withdrawAmount, setWithdrawAmount] = useState('');
-//   const [error, setError] = useState('');
-//   const [anchorEl, setAnchorEl] = useState(null);
-//   const [action, setAction] = useState(null); // Tracks whether it's add or withdraw action
-
-//   const handleClick = (event, actionType) => {
-//     setAnchorEl(event.currentTarget);
-//     setAction(actionType);
-//   };
-
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//     setAction(null);
-//   };
-
-//   const handleAction = () => {
-//     if (action === 'add') {
-//       handleAddFunds();
-//     } else if (action === 'withdraw') {
-//       handleWithdrawFunds();
-//     }
-//     handleClose();
-//   };
-
-//   const handleAddFunds = () => {
-//     if (isNaN(parseFloat(addAmount)) || parseFloat(addAmount) <= 0) {
-//       setError('Please enter a valid amount.');
-//       return;
-//     }
-//     setCurrentFunds(prevFunds => prevFunds + parseFloat(addAmount));
-//     setAddAmount('');
-//     setError('');
-//   };
-
-//   const handleWithdrawFunds = () => {
-//     if (isNaN(parseFloat(withdrawAmount)) || parseFloat(withdrawAmount) <= 0) {
-//       setError('Please enter a valid amount.');
-//       return;
-//     }
-//     if (parseFloat(withdrawAmount) > currentFunds) {
-//       setError('Insufficient funds.');
-//       return;
-//     }
-//     setCurrentFunds(prevFunds => prevFunds - parseFloat(withdrawAmount));
-//     setWithdrawAmount('');
-//     setError('');
-//   };
-
-//   const open = Boolean(anchorEl);
-//   const id = open ? 'simple-popover' : undefined;
-
-//   return (
-//     <div style={{ minHeight: 'calc(100vh - 120px)', background: `url(${bgPic})`, backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>
-//       <Grid container spacing={3} justify="center" alignItems="center">
-//         <Grid item xs={12} align="center" style={{ marginTop: '100px' }}>
-//           <Typography variant="h4" style={{ marginBottom: '20px', color: 'black', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>Username</Typography>
-//           <Typography variant="h4" style={{ marginBottom: '20px', color: 'black', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>Current Balance: ${currentFunds.toFixed(2)}</Typography>
-//         </Grid>
-//         <Grid item xs={12} align="center">
-//         <Button variant="contained" style={{ backgroundColor: '#4CAF50', color: 'white' }} size="large" onClick={(e) => handleClick(e, 'add')}>
-//           Add Funds
-//         </Button>
-//         <Button variant="contained" style={{ backgroundColor: '#FF5252', color: 'white', marginLeft: '150px', marginTop: '100px', marginBottom: '100px' }} size="large" onClick={(e) => handleClick(e, 'withdraw')}>
-//           Withdraw Funds
-//         </Button>
-//       </Grid>
-
-
-//         <Popover
-//           id={id}
-//           open={open}
-//           anchorEl={anchorEl}
-//           onClose={handleClose}
-//           anchorOrigin={{
-//             vertical: 'bottom',
-//             horizontal: 'center',
-//           }}
-//           transformOrigin={{
-//             vertical: 'top',
-//             horizontal: 'center',
-//           }}
-//           PaperProps={{
-//             sx: {
-//               borderRadius: '20px',
-//             },
-//           }}
-//         >
-//           <Box p={2}>
-//           <TextField
-//             fullWidth
-//             label="Enter Amount"
-//             variant="outlined"
-//             value={action === 'add' ? addAmount : withdrawAmount}
-//             onChange={(e) => (action === 'add' ? setAddAmount(e.target.value) : setWithdrawAmount(e.target.value))}
-//             margin="normal"
-//           />
-//           <Button
-//             onClick={handleAction}
-//             sx={{
-//               width: '100%', // Extend button to full width of the box
-//               mt: 2, // Adjust margin top as needed
-//               bgcolor: action === 'add' ? '#4CAF50' : '#FF5252', // Green for 'Add' and red for 'Withdraw'
-//               '&:hover': {
-//                 bgcolor: action === 'add' ? '#388E3C' : '#D32F2F', // Darker shade of green for hover on 'Add' and red for hover on 'Withdraw'
-//               },
-//               color: 'white', // Text color
-//             }}
-//           >
-//             {action === 'add' ? 'Add' : 'Withdraw'}
-//           </Button>
-//         </Box>
-
-//         </Popover>
-//       </Grid>
-//     </div>
-//   );
-// };
-
-// export default FundsPage;
-
-// import React, { useState } from 'react';
-// import { Typography, Grid, Button, TextField, Popover, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-// import bgPic from "./bg_pic.jpg"; // Import the image
-// import { red } from '@mui/material/colors';
-
-// const FundsPage = () => {
-//   const [currentFunds, setCurrentFunds] = useState(1000); // Initial funds
-//   const [addAmount, setAddAmount] = useState('');
-//   const [withdrawAmount, setWithdrawAmount] = useState('');
-//   const [error, setError] = useState('');
-//   const [anchorEl, setAnchorEl] = useState(null);
-//   const [action, setAction] = useState(null); // Tracks whether it's add or withdraw action
-//   const [openDialog, setOpenDialog] = useState(false);
-
-//   const handleClick = (event, actionType) => {
-//     setAnchorEl(event.currentTarget);
-//     setAction(actionType);
-//   };
-
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//     setAction(null);
-//     setError('');
-//   };
-
-//   const handleAction = () => {
-//     if (action === 'add') {
-//       handleAddFunds();
-//     } else if (action === 'withdraw') {
-//       handleWithdrawFunds();
-//     }
-//     handleClose();
-//   };
-
-//   const handleAddFunds = () => {
-//     if (isNaN(parseFloat(addAmount)) || parseFloat(addAmount) <= 0) {
-//       setError('Please enter a valid amount.');
-//       setOpenDialog(true);
-//       return;
-//     }
-//     setCurrentFunds(prevFunds => prevFunds + parseFloat(addAmount));
-//     setAddAmount('');
-//     setError('');
-//   };
-
-//   const handleWithdrawFunds = () => {
-//     if (isNaN(parseFloat(withdrawAmount)) || parseFloat(withdrawAmount) <= 0) {
-//       setError('Please enter a valid amount.');
-//       setOpenDialog(true);
-//       return;
-//     }
-//     if (parseFloat(withdrawAmount) > currentFunds) {
-//       setError('Insufficient funds.');
-//       setOpenDialog(true);
-//       return;
-//     }
-//     setCurrentFunds(prevFunds => prevFunds - parseFloat(withdrawAmount));
-//     setWithdrawAmount('');
-//     setError('');
-//   };
-
-//   const open = Boolean(anchorEl);
-//   const id = open ? 'simple-popover' : undefined;
-
-//   return (
-//     <div style={{ minHeight: 'calc(100vh - 120px)', background: `url(${bgPic})`, backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>
-//       <Grid container spacing={3} justify="center" alignItems="center">
-//         <Grid item xs={12} align="center" style={{ marginTop: '100px' }}>
-//           <Typography variant="h4" style={{ marginBottom: '20px', color: 'black', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>Username</Typography>
-//           <Typography variant="h4" style={{ marginBottom: '20px', color: 'black', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>Current Balance: ${currentFunds.toFixed(2)}</Typography>
-//         </Grid>
-//         <Grid item xs={12} align="center">
-//           <Button variant="contained" style={{ backgroundColor: '#4CAF50', color: 'white' }} size="large" onClick={(e) => handleClick(e, 'add')}>
-//             Add Funds
-//           </Button>
-//           <Button variant="contained" style={{ backgroundColor: '#FF5252', color: 'white', marginLeft: '150px', marginTop: '100px', marginBottom: '100px' }} size="large" onClick={(e) => handleClick(e, 'withdraw')}>
-//             Withdraw Funds
-//           </Button>
-//         </Grid>
-//         <Popover
-//           id={id}
-//           open={open}
-//           anchorEl={anchorEl}
-//           onClose={handleClose}
-//           anchorOrigin={{
-//             vertical: 'bottom',
-//             horizontal: 'center',
-//           }}
-//           transformOrigin={{
-//             vertical: 'top',
-//             horizontal: 'center',
-//           }}
-//           PaperProps={{
-//             sx: {
-//               borderRadius: '20px',
-//             },
-//           }}
-//         >
-//           <Box p={2}>
-//             <TextField
-//               fullWidth
-//               label="Enter Amount"
-//               variant="outlined"
-//               value={action === 'add' ? addAmount : withdrawAmount}
-//               onChange={(e) => (action === 'add' ? setAddAmount(e.target.value) : setWithdrawAmount(e.target.value))}
-//               margin="normal"
-//             />
-//             <Button
-//               onClick={handleAction}
-//               sx={{
-//                 width: '100%', // Extend button to full width of the box
-//                 mt: 2, // Adjust margin top as needed
-//                 bgcolor: action === 'add' ? '#4CAF50' : '#FF5252', // Green for 'Add' and red for 'Withdraw'
-//                 '&:hover': {
-//                   bgcolor: action === 'add' ? '#388E3C' : '#D32F2F', // Darker shade of green for hover on 'Add' and red for hover on 'Withdraw'
-//                 },
-//                 color: 'white', // Text color
-//               }}
-//             >
-//               {action === 'add' ? 'Add' : 'Withdraw'}
-//             </Button>
-//           </Box>
-//         </Popover>
-//         <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-//           <DialogTitle>Error!</DialogTitle>
-//           <DialogContent>
-//             <Typography variant="body1" color="error">{error}</Typography>
-//           </DialogContent>
-//           <DialogActions>
-//             <Button onClick={() => setOpenDialog(false)}>OK</Button>
-//           </DialogActions>
-//         </Dialog>
-//       </Grid>
-//     </div>
-//   );
-// };
-
-// export default FundsPage;
-
-
-// import React, { useState } from 'react';
-// import { Typography, Grid, Button, TextField, Popover, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-// import bgPic from "./bg_pic.jpg"; // Import the image
-// import { red } from '@mui/material/colors';
-
-// const FundsPage = () => {
-//   const [currentFunds, setCurrentFunds] = useState(1000); // Initial funds
-//   const [addAmount, setAddAmount] = useState('');
-//   const [withdrawAmount, setWithdrawAmount] = useState('');
-//   const [error, setError] = useState('');
-//   const [anchorEl, setAnchorEl] = useState(null);
-//   const [action, setAction] = useState(null); // Tracks whether it's add or withdraw action
-//   const [openDialog, setOpenDialog] = useState(false);
-
-//   const handleClick = (event, actionType) => {
-//     setAnchorEl(event.currentTarget);
-//     setAction(actionType);
-//   };
-
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//     setAction(null);
-//     setError('');
-//   };
-
-//   const handleAction = () => {
-//     if (action === 'add') {
-//       handleAddFunds();
-//     } else if (action === 'withdraw') {
-//       handleWithdrawFunds();
-//     }
-//     handleClose();
-//   };
-
-//   const handleAddFunds = () => {
-//     if (isNaN(parseFloat(addAmount)) || parseFloat(addAmount) <= 0) {
-//       setError('Please enter a valid amount!');
-//       setOpenDialog(true);
-//       return;
-//     }
-//     setCurrentFunds(prevFunds => prevFunds + parseFloat(addAmount));
-//     setAddAmount('');
-//     setError('');
-//   };
-  
-//   const handleWithdrawFunds = () => {
-//     if (isNaN(parseFloat(withdrawAmount)) || parseFloat(withdrawAmount) <= 0) {
-//       setError('Please enter a valid amount!');
-//       setOpenDialog(true);
-//       return;
-//     }
-//     if (parseFloat(withdrawAmount) > currentFunds) {
-//       setError('Insufficient Funds!');
-//       setOpenDialog(true);
-//       return;
-//     }
-//     setCurrentFunds(prevFunds => prevFunds - parseFloat(withdrawAmount));
-//     setWithdrawAmount('');
-//     setError('');
-//   };
-  
-
-//   const open = Boolean(anchorEl);
-//   const id = open ? 'simple-popover' : undefined;
-
-//   return (
-//     <div style={{ minHeight: 'calc(100vh - 120px)', background: `url(${bgPic})`, backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>
-//       <Grid container spacing={3} justify="center" alignItems="center">
-//         <Grid item xs={12} align="center" style={{ marginTop: '100px' }}>
-//           <Typography variant="h4" style={{ marginBottom: '20px', color: 'black', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>Username</Typography>
-//           <Typography variant="h4" style={{ marginBottom: '20px', color: 'black', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>Current Balance: ${currentFunds.toFixed(2)}</Typography>
-//         </Grid>
-//         <Grid item xs={12} align="center">
-//           <Button variant="contained" style={{ backgroundColor: '#4CAF50', color: 'white' }} size="large" onClick={(e) => handleClick(e, 'add')}>
-//             Add Funds
-//           </Button>
-//           <Button variant="contained" style={{ backgroundColor: '#FF5252', color: 'white', marginLeft: '150px', marginTop: '100px', marginBottom: '100px' }} size="large" onClick={(e) => handleClick(e, 'withdraw')}>
-//             Withdraw Funds
-//           </Button>
-//         </Grid>
-//         <Popover
-//           id={id}
-//           open={open}
-//           anchorEl={anchorEl}
-//           onClose={handleClose}
-//           anchorOrigin={{
-//             vertical: 'bottom',
-//             horizontal: 'center',
-//           }}
-//           transformOrigin={{
-//             vertical: 'top',
-//             horizontal: 'center',
-//           }}
-//           PaperProps={{
-//             sx: {
-//               borderRadius: '20px',
-//             },
-//           }}
-//         >
-//           <Box p={2}>
-//             <TextField
-//               fullWidth
-//               label="Enter Amount"
-//               variant="outlined"
-//               value={action === 'add' ? addAmount : withdrawAmount}
-//               onChange={(e) => (action === 'add' ? setAddAmount(e.target.value) : setWithdrawAmount(e.target.value))}
-//               margin="normal"
-//             />
-//             <Button
-//               onClick={handleAction}
-//               sx={{
-//                 width: '100%', // Extend button to full width of the box
-//                 mt: 2, // Adjust margin top as needed
-//                 bgcolor: action === 'add' ? '#4CAF50' : '#FF5252', // Green for 'Add' and red for 'Withdraw'
-//                 '&:hover': {
-//                   bgcolor: action === 'add' ? '#388E3C' : '#D32F2F', // Darker shade of green for hover on 'Add' and red for hover on 'Withdraw'
-//                 },
-//                 color: 'white', // Text color
-//               }}
-//             >
-//               {action === 'add' ? 'Add' : 'Withdraw'}
-//             </Button>
-//           </Box>
-//         </Popover>
-//         <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-//           {/* <DialogTitle>Error!!</DialogTitle> */}
-//           <DialogContent>
-//             <Typography variant="body1" color="error">
-//             {error === 'Please enter a valid amount!' ? 'Please enter a valid amount!!' : 'Insufficient Funds !!'}
-
-//             </Typography>
-//           </DialogContent>
-//           <DialogActions>
-//             <Button onClick={() => setOpenDialog(false)}>OK</Button>
-//           </DialogActions>
-//         </Dialog>
-//       </Grid>
-//     </div>
-//   );
-// };
-
-// export default FundsPage;
-
-
-
-import React, { useState } from 'react';
-import { Typography, Grid, Button, TextField, Popover, Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Typography, Grid, Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import bgPic from "./bg_pic.jpeg"; // Import the image
-import { red } from '@mui/material/colors';
 import Swal from "sweetalert2"; // Import swal
 
 const FundsPage = () => {
-  const [currentFunds, setCurrentFunds] = useState(1000); // Initial funds
+  const [currentFunds, setCurrentFunds] = useState(null); // Initial funds
+  const [username, setUsername] = useState('-Username-'); // Initial username
+  const [userId, setUserId] = useState('1'); // Initial user ID
   const [addAmount, setAddAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [error, setError] = useState('');
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [action, setAction] = useState(null); // Tracks whether it's add or withdraw action
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openWithdrawDialog, setOpenWithdrawDialog] = useState(false);
+
+  useEffect(() => {
+    const fetchCurrentFunds = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/funds/${userId}`, { method: 'GET' });
+        if (response.ok) {
+          const data = await response.json();
+          setCurrentFunds(data.funds); // Assuming data is an object with a 'funds' property
+        } else {
+          setError('Failed to fetch funds');
+        }
+      } catch (error) {
+        console.error('Error fetching funds:', error);
+        setError('An error occurred while fetching funds');
+      }
+    };
+    fetchCurrentFunds(); // Call fetchCurrentFunds just once when the component mounts
+    
+  }, []);
 
   const handleAddFundsConfirmation = () => {
     Swal.fire({
@@ -479,17 +84,38 @@ const FundsPage = () => {
     setError('');
   };
 
-  const handleAddFunds = () => {
+  const handleAddFunds = async () => {
     if (isNaN(parseFloat(addAmount)) || parseFloat(addAmount) <= 0) {
       setError('Please enter a valid amount!');
       return;
     }
-    setCurrentFunds(prevFunds => prevFunds + parseFloat(addAmount));
-    setAddAmount('');
-    setOpenAddDialog(false);
+    try {
+      const response = await fetch(`http://localhost:8000/api/funds/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'add',
+          amount: parseFloat(addAmount),
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCurrentFunds(data.funds);
+        setOpenAddDialog(false);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error);
+      }
+    } catch (error) {
+      console.error('Error adding funds:', error);
+      setError('An error occurred. Please try again.');
+    }
   };
 
-  const handleWithdrawFunds = () => {
+  const handleWithdrawFunds = async () => {
     if (isNaN(parseFloat(withdrawAmount)) || parseFloat(withdrawAmount) <= 0) {
       setError('Please enter a valid amount!');
       return;
@@ -498,17 +124,38 @@ const FundsPage = () => {
       setError('Insufficient Funds!');
       return;
     }
-    setCurrentFunds(prevFunds => prevFunds - parseFloat(withdrawAmount));
-    setWithdrawAmount('');
-    setOpenWithdrawDialog(false);
+    try {
+      const response = await fetch(`http://localhost:8000/api/funds/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'withdraw',
+          amount: parseFloat(withdrawAmount),
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCurrentFunds(data.funds);
+        setOpenWithdrawDialog(false);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error);
+      }
+    } catch (error) {
+      console.error('Error withdrawing funds:', error);
+      setError('An error occurred. Please try again.');
+    }
   };
 
   return (
     <div style={{ minHeight: 'calc(100vh - 120px)', background: `url(${bgPic})`, backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>
       <Grid container spacing={3} justify="center" alignItems="center">
         <Grid item xs={12} align="center" style={{ marginTop: '100px' }}>
-          <Typography variant="h4" style={{ marginBottom: '20px', color: 'black', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>Username</Typography>
-          <Typography variant="h4" style={{ marginBottom: '20px', color: 'black', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>Current Balance: ${currentFunds.toFixed(2)}</Typography>
+          <Typography variant="h4" style={{ marginTop:'30px' , marginBottom: '20px', color: 'black', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>{username}</Typography>
+          <Typography variant="h4" style={{ marginBottom: '20px', color: 'black', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>Current Balance: {currentFunds !== null ? `$${currentFunds.toFixed(2)}` : 'Loading...'}</Typography>
         </Grid>
         <Grid item xs={12} align="center">
           <Button variant="contained" style={{ backgroundColor: 'primary', color: 'white' }} size="large" onClick={handleAddFundsConfirmation}>
@@ -561,7 +208,3 @@ const FundsPage = () => {
 };
 
 export default FundsPage;
-
-
-
-
