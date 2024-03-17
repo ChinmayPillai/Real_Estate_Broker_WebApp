@@ -11,11 +11,12 @@ import {
 } from "@mui/material";
 import bgPic from "./bg_pic.jpeg"; // Import the image
 import Swal from "sweetalert2"; // Import swal
+import { useAuth } from "../Authorisation/Auth";
 
 const FundsPage = () => {
   const [currentFunds, setCurrentFunds] = useState(null); // Initial funds
   const [username, setUsername] = useState("-Username-"); // Initial username
-  const [userId, setUserId] = useState("1"); // Initial user ID
+  const { userId } = useAuth();
   const [addAmount, setAddAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [error, setError] = useState("");
@@ -188,7 +189,7 @@ const FundsPage = () => {
               textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
             }}
           >
-            {username}
+            {userId}
           </Typography>
           <Typography
             variant="h4"
