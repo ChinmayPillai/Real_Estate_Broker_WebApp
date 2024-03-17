@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Property, Order, UserProfile
-from .serializers import PropertySerializer, OrderSerializer, RegisterSerializer
+from .serializers import PropertySerializer, OrderSerializer, RegisterSerializer, UserProfileSerializer
 from django.contrib.auth.hashers import check_password
 
 
@@ -88,6 +88,20 @@ def login(request):
             # Passwords don't match, authentication failed
             return Response({"message": "Invalid username or password"}, status=401)
     
+
+# API to get user data
+@api_view(['GET'])
+def get_user(request, id):
+    try:
+        user = UserProfile.objects.get(id=id)
+    except UserProfile.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = UserProfileSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+
 
 # API to get/update user funds
 @api_view(['GET', 'PUT'])
