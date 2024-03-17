@@ -5,6 +5,10 @@ from .models import Property, Order, UserProfile
 from .serializers import PropertySerializer, OrderSerializer, RegisterSerializer
 from django.contrib.auth.hashers import check_password
 
+from .models import Property, Order, UserProfile
+from .serializers import PropertySerializer, OrderSerializer, RegisterSerializer
+from django.contrib.auth.hashers import check_password
+
 
 # API to get All Properties
 @api_view(['GET'])

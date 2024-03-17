@@ -10,7 +10,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Swal from 'sweetalert2';
 
-const LimitBidButton = ({ userId, propertyId }) => {
+const LimitSellButton = ({ userId, propertyId }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [bidAmount, setBidAmount] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
@@ -52,7 +52,7 @@ const LimitBidButton = ({ userId, propertyId }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          action: 'buy',
+          action: 'sell',
           user_id: userId, // Replace with the actual user ID
           property_id: propertyId, // Replace with the actual property ID
           price: bidAmount, // Send the bid amount to the API
@@ -64,7 +64,7 @@ const LimitBidButton = ({ userId, propertyId }) => {
         // Handle JSON response
         Swal.fire({
           icon: 'success',
-          title: 'Limit Order Buy Successful',
+          title: 'Limit Order Sell Successful',
           text: `Bid of ${bidAmount} submitted successfully!`,
         });
       } else {
@@ -72,7 +72,7 @@ const LimitBidButton = ({ userId, propertyId }) => {
         const errorText = await response.text();
         Swal.fire({
           icon: 'error',
-          title: 'Limit Order Buy Failed',
+          title: 'Limit Order Sell Failed',
           text: `Failed to submit bid. Server error: ${errorText}`,
         });
       }
@@ -93,7 +93,7 @@ const LimitBidButton = ({ userId, propertyId }) => {
   return (
     <div>
       <Button style={{ width: '100%' }} variant="contained" color="primary" className="buy-button" onClick={handleClick}>
-        Limit Order Buy
+        Limit Order Sell
       </Button>
       <Popover
         id={id}
@@ -126,7 +126,7 @@ const LimitBidButton = ({ userId, propertyId }) => {
             size="small"
             style={{ marginTop: '10px' }}
           >
-            Submit Bid
+            Submit Sell Bid
           </Button>
         </Box>
       </Popover>
@@ -140,7 +140,7 @@ const LimitBidButton = ({ userId, propertyId }) => {
         <DialogTitle id="alert-dialog-title">Confirm Bid</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to submit a bid for {bidAmount}?
+            Are you sure you want to submit a sell bid for {bidAmount}?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -156,5 +156,5 @@ const LimitBidButton = ({ userId, propertyId }) => {
   );
 };
 
-export default LimitBidButton;
+export default LimitSellButton;
 

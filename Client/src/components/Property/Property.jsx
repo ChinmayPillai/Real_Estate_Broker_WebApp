@@ -4,9 +4,6 @@ import {
   Typography,
   Container,
   CardMedia,
-  List,
-  ListItem,
-  ListItemText,
   Button,
   Table,
   TableBody,
@@ -18,28 +15,17 @@ import {
 } from "@mui/material";
 import propertyimg from "./prop.webp";
 import "./Property.css"; // Import the CSS file for styling
-import BidButton from "./BidButton";
+import LimitBidButton from "./BidButton";
+import MarketBidButton from "./BidButton2";
+import LimitSellButton from "./SellButton";
+import MarketSellButton from "./SellButton2";
 
-function createData(buybid, sellbid) {
-  return { buybid, sellbid };
-}
-
-const rows = [
-  createData(24, 4.0),
-  createData(37, 4.3),
-  createData(24, 6.0),
-  createData(67, 4.3),
-  createData(49, 3.9),
-];
-
-function BasicTable({ rows }) {
+function BasicTable({ buyBids, sellBids }) {
   // Sort rows by buybid in ascending order and sellbid in descending order
-  const sortedRows = rows.sort((a, b) => {
-    if (a.buybid !== b.buybid) {
-      return a.buybid - b.buybid; // Ascending order for buybid
-    }
-    return b.sellbid - a.sellbid; // Descending order for sellbid if buybid is equal
-  });
+  const sortedRows = buyBids.map((buyBid, index) => ({
+    buyBid,
+    sellBid: sellBids[index],
+  }));
 
   return (
     <TableContainer component={Paper} className="Table">
@@ -54,9 +40,9 @@ function BasicTable({ rows }) {
           {sortedRows.map((row, index) => (
             <TableRow key={index}>
               <TableCell component="th" scope="row">
-                {row.buybid}
+                {row.buyBid}
               </TableCell>
-              <TableCell>{row.sellbid}</TableCell>
+              <TableCell>{row.sellBid}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -68,30 +54,116 @@ function BasicTable({ rows }) {
 export default function Property() {
   const { propertyId } = useParams();
   const [property, setProperty] = useState(null);
+  const [userId, setUserId] = useState(1); // Replace with the actual user ID
+  const [buyBids, setBuyBids] = useState([]);
+  const [sellBids, setSellBids] = useState([]);
+
+  const handleAddToWatchlist = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/watchlist/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'add',
+          property_id: propertyId,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Added to watchlist:', data.watchlist);
+        // Handle success, e.g., show a success message
+      } else {
+        const errorData = await response.json();
+        console.error('Error adding to watchlist:', errorData);
+        // Handle error, e.g., show an error message
+      }
+    } catch (error) {
+      console.error('Error adding to watchlist:', error);
+      // Handle error, e.g., show an error message
+    }
+  };
+
+  const handleRemoveFromWatchlist = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/watchlist/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'remove',
+          property_id: propertyId,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Removed from watchlist:', data.watchlist);
+        // Handle success, e.g., show a success message
+      } else {
+        const errorData = await response.json();
+        console.error('Error removing from watchlist:', errorData);
+        // Handle error, e.g., show an error message
+      }
+    } catch (error) {
+      console.error('Error removing from watchlist:', error);
+      // Handle error, e.g., show an error message
+    }
+  };
+
+
 
   useEffect(() => {
     // Fetch property data from the server based on propertyId
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `localhost:3000/api/properties/${propertyId}`
+        const propertyResponse = await fetch(
+          `http://localhost:8000/api/properties/${propertyId}`
         );
-        if (!response.ok) {
+        if (!propertyResponse.ok) {
           throw new Error("Failed to fetch property");
         }
-        const data = await response.json();
-        setProperty(data);
+        const propertyData = await propertyResponse.json();
+        setProperty(propertyData);
+
+        // Fetch top buy orders
+        const buyResponse = await fetch(
+          `http://localhost:8000/api/orders/buy/${propertyId}`
+        );
+        if (!buyResponse.ok) {
+          throw new Error("Failed to fetch buy orders");
+        }
+        const buyData = await buyResponse.json();
+        const buyBidsArray = buyData.map((order) => order.price);
+        setBuyBids(buyBidsArray);
+
+        // Fetch top sell orders
+        const sellResponse = await fetch(
+          `http://localhost:8000/api/orders/sell/${propertyId}`
+        );
+        if (!sellResponse.ok) {
+          throw new Error("Failed to fetch sell orders");
+        }
+        const sellData = await sellResponse.json();
+        const sellBidsArray = sellData.map((order) => order.price);
+        setSellBids(sellBidsArray);
       } catch (error) {
-        console.error("Error fetching property:", error);
+        console.error("Error fetching data:", error);
         // Use default property values if fetch fails
         const defaultProperty = {
-          title: "Property Title",
+          name: "Property Title",
+          category: "Property Category",
+          location: "Property Location",
+          ltp: "Property LTP",
           description:
-            "Welcome to your dream home! Nestled in the heart of a vibrant community, this charming 3-bedroom, 2-bathroom haven boasts modern comforts and classic appeal. Step inside to discover an open-concept layout, perfect for entertaining guests or enjoying quiet evenings by the fireplace. The spacious kitchen features sleek countertops and stainless steel appliances. Retreat to the luxurious master suite with a spa-like ensuite bath and ample closet space. Outside, a serene backyard oasis awaits, ideal for summer BBQs. With top-rated schools and amenities just moments away, this is more than a home – it's a lifestyle. Don't miss your chance to make it yours!",
-          price: "$0",
-          image: propertyimg,
+            "Welcome to your dream home! Nestled in the heart of a vibrant community, this charming property boasts modern comforts and classic appeal.",
         };
         setProperty(defaultProperty);
+        setBuyBids([0,0,0,0,0]); // Default buy bids
+        setSellBids([0,0,0,0,0]); // Default sell bids
       }
     };
 
@@ -100,13 +172,16 @@ export default function Property() {
     } else {
       // Default property object if no propertyId is passed
       const defaultProperty = {
-        title: "Property Title",
+        name: "Property Title",
+        category: "Property Category",
+        location: "Property Location",
+        ltp: "Property LTP",
         description:
-          "Welcome to your dream home! Nestled in the heart of a vibrant community, this charming 3-bedroom, 2-bathroom haven boasts modern comforts and classic appeal. Step inside to discover an open-concept layout, perfect for entertaining guests or enjoying quiet evenings by the fireplace. The spacious kitchen features sleek countertops and stainless steel appliances. Retreat to the luxurious master suite with a spa-like ensuite bath and ample closet space. Outside, a serene backyard oasis awaits, ideal for summer BBQs. With top-rated schools and amenities just moments away, this is more than a home – it's a lifestyle. Don't miss your chance to make it yours!",
-        price: "$0",
-        image: propertyimg,
+          "Welcome to your dream home! Nestled in the heart of a vibrant community, this charming property boasts modern comforts and classic appeal.",
       };
       setProperty(defaultProperty);
+      setBuyBids([0,0,0,0,0]); // Default buy bids
+      setSellBids([0,0,0,0,0]); // Default sell bids
     }
   }, [propertyId]);
 
@@ -119,34 +194,53 @@ export default function Property() {
       <div className="property-content">
         <CardMedia
           component="img"
-          image={property.image}
+          image={property.image || propertyimg}
           alt="property image"
           sx={{ width: 650, objectFit: "cover" }}
           className="property-image"
         />
         <div className="property-buttons">
-          <Button variant="contained" color="primary" className="buy-button">
-            Market Order Buy
-          </Button>
-          <BidButton />
+          <MarketBidButton bidAmount={property.ltp} userId={userId} propertyId={propertyId}/>
+          <LimitBidButton userId={userId} propertyId={propertyId}/>
+          <MarketSellButton bidAmount={property.ltp} userId={userId} propertyId={propertyId}/>
+          <LimitSellButton userId={userId} propertyId={propertyId}/>
           <Button
             variant="outlined"
             color="primary"
             className="wishlist-button"
+            onClick={handleAddToWatchlist}
           >
             Add to Wishlist
-          </Button>
-          <BasicTable rows={rows} />
+          </Button >
+          <Button
+            variant="outlined"
+            color="primary"
+            className="wishlist-button"
+            onClick={handleRemoveFromWatchlist}
+          >
+            Remove from Wishlist
+          </Button >
+          <BasicTable buyBids={buyBids} sellBids={sellBids} />
         </div>
       </div>
       <div className="property-details">
         <Typography variant="h4" className="property-title" gutterBottom>
-          {property.title}
+          {property.name}
         </Typography>
-        <Typography variant="subtitle1" gutterBottom>
-          Market Order Price: {property.price}
+        <Typography variant="h6" className="property-category" gutterBottom>
+          Category: {property.category}
         </Typography>
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="h6" className="property-location" gutterBottom>
+          Location: {property.location}
+        </Typography>
+        <Typography variant="subtitle1" className="property-ltp" gutterBottom>
+          Market Order Price: {property.ltp}
+        </Typography>
+        <Typography
+          variant="body1"
+          className="property-description"
+          gutterBottom
+        >
           {property.description}
         </Typography>
       </div>
