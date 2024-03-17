@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Property, UserProfile, Order
+from .models import Property, UserProfile, Order, Support
 from django.contrib.auth.hashers import make_password
 
 
@@ -71,3 +71,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             self.validate_pan(pan)
 
         return data
+    
+
+class SupportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Support
+        fields = '__all__'

@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Property, Order, UserProfile
-from .serializers import PropertySerializer, OrderSerializer, RegisterSerializer, UserProfileSerializer
+from .serializers import PropertySerializer, OrderSerializer, RegisterSerializer, UserProfileSerializer, SupportSerializer
 from django.contrib.auth.hashers import check_password
 
 
@@ -99,6 +99,17 @@ def get_user(request, id):
     
     serializer = UserProfileSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# API to get customer support messages
+@api_view(['POST'])
+def support(request):
+    serializer = SupportSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message": "Message sent successfully"}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
 
 
