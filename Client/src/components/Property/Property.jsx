@@ -121,10 +121,10 @@ export default function Property() {
         }
         const propertyData = await propertyResponse.json();
         setProperty(propertyData);
-        const imageUrl = 'https://jooinn.com/images/beautiful-house-20.jpg';
-        const img = new Image();
-        img.src = imageUrl;
-        setPropertyimg(img);
+        // const imageUrl = 'https://jooinn.com/images/beautiful-house-20.jpg';
+        // const img = new Image();
+        // img.src = imageUrl;
+        // setPropertyimg(img);
 
         // Fetch top buy orders
         const buyResponse = await fetch(
@@ -180,6 +180,15 @@ export default function Property() {
       setBuyBids([0, 0, 0, 0, 0]); // Default buy bids
       setSellBids([0, 0, 0, 0, 0]); // Default sell bids
     }
+    
+    fetchData();
+
+    // Fetch new bids every 10 seconds
+    const interval = setInterval(() => {
+      fetchData();
+    }, 2000);
+
+    return () => clearInterval(interval); // Cleanup the interval on unmount
   }, [propertyId]);
 
   if (!property) {
