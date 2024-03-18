@@ -55,9 +55,8 @@ python manage.py createsuperuser
 2. To test user functionalities, register user accounts on the frontend website. Users can then log in and explore the application.
 3. User can view all the listed properties on the broker website.
 4. Users have the option to place orders on properties. There are two main order types:
-
-- **Limit Orders**: Users can specify a desired price and quantity for a property. The order will only be executed if the market price reaches the user's specified limit.
-- **Market Orders**: Users can purchase a property at the current market price. This is a quicker option but offers less control over the purchase price.
+    * **Limit Orders**: Users can specify a desired price and quantity for a property. The order will only be executed if the market price reaches the user's specified limit.
+    * **Market Orders**: Users can purchase a property at the current market price. This is a quicker option but offers less control over the purchase price.
 5. Users can add funds for buying and withdraw funds obtained from selling the properties. 
 
 ## Tech Stack
