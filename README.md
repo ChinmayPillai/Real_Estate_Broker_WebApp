@@ -35,6 +35,23 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+## Running the WebApp
+
+### Admin Login and Property Management:
+
+1. Start by logging in as the admin user. You'll be able to add new properties to the system by providing details like address, description, etc. Each property will be assigned a unique ID.
+2.   Once a property is added, you can navigate to the user management section and associate the property ID with the relevant user's portfolio, effectively assigning ownership of that property.
+
+### User Accounts and Order Placement:
+
+1. To test user functionalities, register user accounts on the frontend website. Users can then log in and explore the application.
+2. User can view all the listed properties on the broker website.
+3. Users have the option to place orders on properties. There are two main order types:
+
+- **Limit Orders**: Users can specify a desired price and quantity for a property. The order will only be executed if the market price reaches the user's specified limit.
+- **Market Orders**: Users can purchase a property at the current market price. This is a quicker option but offers less control over the purchase price.
+4. Users can add funds for buying and withdraw funds obtained from selling the properties. 
+
 ## Tech Stack
 
 ### Frontend
