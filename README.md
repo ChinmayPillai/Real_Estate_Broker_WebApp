@@ -32,16 +32,27 @@ pip install mysqlclient
 cd server
 python manage.py makemigrations
 python manage.py migrate 
-python manage.py runserver [port]
+python manage.py runserver
 ```
 
 ## Tech Stack
 
 ### Frontend
+JavaScript
 ReactJS
+React-Router-Dom
+Material UI
+Bootstrap
+HTML 5
+CSS
+
 
 ### Backend
+Python
 Django
+Django REST Framework
+MySQLClient
+Django CORS Headers
 
 ### Database
 MySQL
