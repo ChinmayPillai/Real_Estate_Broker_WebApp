@@ -83,7 +83,7 @@ export default function Home() {
                       Location: {property.location}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Price: {property.ltp}
+                      Last Traded Price: {property.ltp}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

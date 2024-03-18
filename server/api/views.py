@@ -262,6 +262,12 @@ def marketOrder(request):
 
         seller = order.user
 
+        if property_id in user.portfolio:
+            return Response({"error": "Property already in portfolio"}, status=status.HTTP_400_BAD_REQUEST) 
+
+        if(user.id == seller.id):
+            return Response({"error": "You can't buy your own property"}, status=status.HTTP_400_BAD_REQUEST)
+
         if user.funds < price:
             return Response({"error": "Insufficient funds"}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -346,8 +352,12 @@ def limitOrder(request):
         
         # Making the assumption that user won't use up the funds in the time between order placement and execution
         if action == 'buy':
+            print(user.portfolio)
+            print(property_id)
             if user.funds < price:
-                return Response({"error": "Insufficient funds"}, status=status.HTTP_400_BAD_REQUEST)  
+                return Response({"error": "Insufficient funds"}, status=status.HTTP_400_BAD_REQUEST)
+            if str(property_id) in user.portfolio:
+                return Response({"error": "Property already in portfolio"}, status=status.HTTP_400_BAD_REQUEST)             
         elif action == 'sell':
             if property_id not in user.portfolio:
                 return Response({"error": "Property not in portfolio"}, status=status.HTTP_400_BAD_REQUEST)            

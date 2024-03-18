@@ -24,10 +24,16 @@ import { useAuth } from "../Authorisation/Auth";
 
 function BasicTable({ buyBids, sellBids }) {
   // Sort rows by buybid in ascending order and sellbid in descending order
-  const sortedRows = buyBids.map((buyBid, index) => ({
-    buyBid,
-    sellBid: sellBids[index],
-  }));
+  // State to hold the sorted rows
+  const [sortedRows, setSortedRows] = useState([]);
+
+  const combinedBids = [];
+  for (let i = 0; i < Math.max(buyBids.length, sellBids.length); i++) {
+    combinedBids.push({
+      buyBid: buyBids[i] || null,
+      sellBid: sellBids[i] || null,
+    });
+  }
 
   return (
     <TableContainer component={Paper} className="Table">
@@ -39,12 +45,12 @@ function BasicTable({ buyBids, sellBids }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortedRows.map((row, index) => (
+          {combinedBids.map((row, index) => (
             <TableRow key={index}>
               <TableCell component="th" scope="row">
-                {row.buyBid}
+                {row.buyBid !== null ? row.buyBid : "-"}
               </TableCell>
-              <TableCell>{row.sellBid}</TableCell>
+              <TableCell>{row.sellBid !== null ? row.sellBid : "-"}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -136,6 +142,7 @@ export default function Property() {
         const buyData = await buyResponse.json();
         const buyBidsArray = buyData.map((order) => order.price);
         setBuyBids(buyBidsArray);
+        console.log(buyBidsArray);
 
         // Fetch top sell orders
         const sellResponse = await fetch(
@@ -147,6 +154,7 @@ export default function Property() {
         const sellData = await sellResponse.json();
         const sellBidsArray = sellData.map((order) => order.price);
         setSellBids(sellBidsArray);
+        console.log(sellBidsArray);
       } catch (error) {
         console.error("Error fetching data:", error);
         // Use default property values if fetch fails
@@ -246,7 +254,7 @@ export default function Property() {
           Location: {property.location}
         </Typography>
         <Typography variant="subtitle1" className="property-ltp" gutterBottom>
-          Market Order Price: {property.ltp}
+          Last Traded Price: {property.ltp}
         </Typography>
         <Typography
           variant="body1"
