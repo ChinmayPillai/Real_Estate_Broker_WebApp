@@ -27,8 +27,8 @@ const MarketSellButton = ({ bidAmount, userId, propertyId }) => {
         },
         body: JSON.stringify({
           action: 'sell',
-          user_id: +userId, // Replace with the actual user ID
-          property_id: +propertyId, // Replace with the actual property ID
+          user_id: userId, // Replace with the actual user ID
+          property_id: propertyId, // Replace with the actual property ID
         }),
       });
   
