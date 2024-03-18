@@ -13,13 +13,14 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import propertyimg from "./prop.webp";
+import defpropertyimg from "./prop.webp";
 import "./Property.css"; // Import the CSS file for styling
 import LimitBidButton from "./BidButton";
 import MarketBidButton from "./BidButton2";
 import LimitSellButton from "./SellButton";
 import MarketSellButton from "./SellButton2";
 import ConfirmationDialog from "./ConfirmationDialogue";
+import { useAuth } from "../Authorisation/Auth";
 
 function BasicTable({ buyBids, sellBids }) {
   // Sort rows by buybid in ascending order and sellbid in descending order
@@ -55,12 +56,13 @@ function BasicTable({ buyBids, sellBids }) {
 export default function Property() {
   const { propertyId } = useParams();
   const [property, setProperty] = useState(null);
-  const [userId, setUserId] = useState(1); // Replace with the actual user ID
   const [buyBids, setBuyBids] = useState([]);
   const [sellBids, setSellBids] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [actionType, setActionType] = useState("");
+  const [propertyimg , setPropertyimg] = useState(defpropertyimg);
+  const { userId } = useAuth();
 
   const handleAddToWatchlist = () => {
     setActionType("add");
@@ -119,6 +121,10 @@ export default function Property() {
         }
         const propertyData = await propertyResponse.json();
         setProperty(propertyData);
+        const imageUrl = 'https://jooinn.com/images/beautiful-house-20.jpg';
+        const img = new Image();
+        img.src = imageUrl;
+        setPropertyimg(img);
 
         // Fetch top buy orders
         const buyResponse = await fetch(
