@@ -67,18 +67,22 @@ export default function Property() {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [actionType, setActionType] = useState("");
-  const [propertyimg , setPropertyimg] = useState(defpropertyimg);
+  const [propertyimg, setPropertyimg] = useState(defpropertyimg);
   const { userId } = useAuth();
 
   const handleAddToWatchlist = () => {
     setActionType("add");
-    setDialogMessage("Are you sure you want to add this property to your wishlist?");
+    setDialogMessage(
+      "Are you sure you want to add this property to your wishlist?"
+    );
     setOpenDialog(true);
   };
 
   const handleRemoveFromWatchlist = () => {
     setActionType("remove");
-    setDialogMessage("Are you sure you want to remove this property from your wishlist?");
+    setDialogMessage(
+      "Are you sure you want to remove this property from your wishlist?"
+    );
     setOpenDialog(true);
   };
 
@@ -89,24 +93,27 @@ export default function Property() {
   const handleDialogConfirm = async () => {
     setOpenDialog(false);
     try {
-      const response = await fetch(`http://localhost:8000/api/watchlist/${userId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          action: actionType,
-          property_id: propertyId,
-        }),
-      });
+      const response = await fetch(
+        `http://localhost:8000/api/watchlist/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action: actionType,
+            property_id: propertyId,
+          }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Action successful:", data.message);
+        console.log("Action successful: Watchlist fetched");
         // Handle success, e.g., show a success message
       } else {
         const errorData = await response.json();
-        console.error("Action failed:", errorData);
+        console.error("Action failed:", errorData.error);
         // Handle error, e.g., show an error message
       }
     } catch (error) {
@@ -142,7 +149,6 @@ export default function Property() {
         const buyData = await buyResponse.json();
         const buyBidsArray = buyData.map((order) => order.price);
         setBuyBids(buyBidsArray);
-        console.log(buyBidsArray);
 
         // Fetch top sell orders
         const sellResponse = await fetch(
@@ -154,7 +160,6 @@ export default function Property() {
         const sellData = await sellResponse.json();
         const sellBidsArray = sellData.map((order) => order.price);
         setSellBids(sellBidsArray);
-        console.log(sellBidsArray);
       } catch (error) {
         console.error("Error fetching data:", error);
         // Use default property values if fetch fails
@@ -188,7 +193,7 @@ export default function Property() {
       setBuyBids([0, 0, 0, 0, 0]); // Default buy bids
       setSellBids([0, 0, 0, 0, 0]); // Default sell bids
     }
-    
+
     fetchData();
 
     // Fetch new bids every 10 seconds
@@ -220,9 +225,17 @@ export default function Property() {
           className="property-image"
         />
         <div className="property-buttons">
-          <MarketBidButton bidAmount={property.ltp} userId={userId} propertyId={propertyId} />
+          <MarketBidButton
+            bidAmount={property.ltp}
+            userId={userId}
+            propertyId={propertyId}
+          />
           <LimitBidButton userId={userId} propertyId={propertyId} />
-          <MarketSellButton bidAmount={property.ltp} userId={userId} propertyId={propertyId} />
+          <MarketSellButton
+            bidAmount={property.ltp}
+            userId={userId}
+            propertyId={propertyId}
+          />
           <LimitSellButton userId={userId} propertyId={propertyId} />
           <Button
             variant="outlined"

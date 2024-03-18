@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Swal from 'sweetalert2';
+import React, { useState } from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Swal from "sweetalert2";
 
 const MarketSellButton = ({ bidAmount, userId, propertyId }) => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -20,53 +20,58 @@ const MarketSellButton = ({ bidAmount, userId, propertyId }) => {
 
   const handleBidSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/marketorder', {
-        method: 'PUT',
+      const response = await fetch("http://localhost:8000/api/marketorder", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          action: 'sell',
+          action: "sell",
           user_id: userId, // Replace with the actual user ID
           property_id: propertyId, // Replace with the actual property ID
         }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         // Handle JSON response
         Swal.fire({
-          icon: 'success',
-          title: 'Market Order Sell Successful',
+          icon: "success",
+          title: "Market Order Sell Successful",
           text: `Bid of ${bidAmount} submitted successfully!`,
         });
       } else {
         // Handle non-JSON response (like HTML error page)
-        const errorText = await response.text();
+        const errorText = await response.json();
         Swal.fire({
-          icon: 'error',
-          title: 'Market Order Sell Failed',
-          text: `Failed to submit bid. Server error: ${errorText}`,
+          icon: "error",
+          title: "Market Order Sell Failed",
+          text: `Failed to submit bid: ${errorText.error}`,
         });
       }
     } catch (error) {
-      console.error('Error placing Market Order:', error);
+      console.error("Error placing Market Order:", error);
       // Show error message
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'An error occurred. Please try again later.',
+        icon: "error",
+        title: "Error",
+        text: "An error occurred. Please try again later.",
       });
     } finally {
       // Close the dialog
       handleDialogClose();
-    };
+    }
   };
-  
 
   return (
     <div>
-      <Button style={{ width: '100%' }} variant="contained" color="primary" className="buy-button" onClick={handleDialogOpen}>
+      <Button
+        style={{ width: "100%" }}
+        variant="contained"
+        color="primary"
+        className="buy-button"
+        onClick={handleDialogOpen}
+      >
         Market Order Sell
       </Button>
 

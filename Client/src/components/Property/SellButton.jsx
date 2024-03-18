@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Popover from '@mui/material/Popover';
-import Box from '@mui/material/Box';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Swal from 'sweetalert2';
+import React, { useState } from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Popover from "@mui/material/Popover";
+import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Swal from "sweetalert2";
 
 const LimitSellButton = ({ userId, propertyId }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [bidAmount, setBidAmount] = useState('');
+  const [bidAmount, setBidAmount] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
 
   const handleClick = (event) => {
@@ -28,7 +28,7 @@ const LimitSellButton = ({ userId, propertyId }) => {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const id = open ? "simple-popover" : undefined;
 
   const handleBidChange = (event) => {
     setBidAmount(event.target.value);
@@ -38,61 +38,67 @@ const LimitSellButton = ({ userId, propertyId }) => {
     // Check if bidAmount is numeric
     if (!/^\d+$/.test(bidAmount)) {
       Swal.fire({
-        icon: 'error',
-        title: 'Invalid Input',
-        text: 'Please enter a valid numeric value for the bid amount.',
+        icon: "error",
+        title: "Invalid Input",
+        text: "Please enter a valid numeric value for the bid amount.",
       });
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/limitorder', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8000/api/limitorder", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          action: 'sell',
+          action: "sell",
           user_id: userId, // Replace with the actual user ID
           property_id: propertyId, // Replace with the actual property ID
           price: +bidAmount, // Send the bid amount to the API
         }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         // Handle JSON response
         Swal.fire({
-          icon: 'success',
-          title: 'Limit Order Sell Successful',
+          icon: "success",
+          title: "Limit Order Sell Successful",
           text: `Bid of ${bidAmount} submitted successfully!`,
         });
       } else {
         // Handle non-JSON response (like HTML error page)
-        const errorText = await response.text();
+        const errorText = await response.json();
         Swal.fire({
-          icon: 'error',
-          title: 'Limit Order Sell Failed',
-          text: `Failed to submit bid. Server error: ${errorText}`,
+          icon: "error",
+          title: "Limit Order Sell Failed",
+          text: `Failed to submit bid: ${errorText.error}`,
         });
       }
     } catch (error) {
-      console.error('Error placing Limit Order:', error);
+      console.error("Error placing Limit Order:", error);
       // Show error message
       Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'An error occurred. Please try again later.',
+        icon: "error",
+        title: "Error",
+        text: "An error occurred. Please try again later.",
       });
     } finally {
       // Close the dialog
       handleDialogClose();
-    };
+    }
   };
 
   return (
     <div>
-      <Button style={{ width: '100%' }} variant="contained" color="primary" className="buy-button" onClick={handleClick}>
+      <Button
+        style={{ width: "100%" }}
+        variant="contained"
+        color="primary"
+        className="buy-button"
+        onClick={handleClick}
+      >
         Limit Order Sell
       </Button>
       <Popover
@@ -101,12 +107,12 @@ const LimitSellButton = ({ userId, propertyId }) => {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
+          vertical: "bottom",
+          horizontal: "left",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
+          vertical: "top",
+          horizontal: "left",
         }}
       >
         <Box p={2}>
@@ -124,7 +130,7 @@ const LimitSellButton = ({ userId, propertyId }) => {
             onClick={handleBidSubmit}
             fullWidth
             size="small"
-            style={{ marginTop: '10px' }}
+            style={{ marginTop: "10px" }}
           >
             Submit Sell Bid
           </Button>
@@ -157,4 +163,3 @@ const LimitSellButton = ({ userId, propertyId }) => {
 };
 
 export default LimitSellButton;
-
