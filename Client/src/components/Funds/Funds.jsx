@@ -17,6 +17,7 @@ const FundsPage = () => {
   const [currentFunds, setCurrentFunds] = useState(null); // Initial funds
   const [username, setUsername] = useState("-Username-"); // Initial username
   const { userId } = useAuth();
+  console.log(userId);
   const [addAmount, setAddAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [error, setError] = useState("");
