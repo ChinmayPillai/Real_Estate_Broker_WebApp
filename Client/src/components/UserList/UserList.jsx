@@ -160,7 +160,7 @@ export default function UserList() {
         ))}
       </ul> */}
 
-      <Paper sx={{ width: "98%", overflow: "hidden", padding: "12px" }}>
+      <Paper sx={{ background:"#98eff2", width: "98%", overflow: "hidden", padding: "12px" }}>
         <Select
           value={selectedOption}
           onChange={(event) => {
@@ -176,7 +176,8 @@ export default function UserList() {
           sx={{
             fontSize: "20px", // Increase font size
             fontWeight: "bold", // Use bold font weight
-            marginBottom: "20px", // Add margin to increase gap
+            margin: "20px", // Add margin to increase gap
+            marginTop: "20px",
             "& .MuiSelect-select": {
               padding: "10px", // Add padding for better appearance
             },
@@ -204,30 +205,30 @@ export default function UserList() {
 
         {rows.length > 0 && (
           <TableContainer>
-            <Table stickyHeader aria-label="sticky table">
+            <Table sx={{background:"#98eff2"}} stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
                   <TableCell
                     align="left"
-                    style={{ minWidth: "100px", fontWeight: "bold" }}
+                    style={{ background:"#98eff2", minWidth: "100px", fontWeight: "bold" }}
                   >
                     Name
                   </TableCell>
                   <TableCell
                     align="left"
-                    style={{ minWidth: "100px", fontWeight: "bold" }}
+                    style={{background:"#98eff2", minWidth: "100px", fontWeight: "bold" }}
                   >
                     Category
                   </TableCell>
                   <TableCell
                     align="left"
-                    style={{ minWidth: "100px", fontWeight: "bold" }}
+                    style={{background:"#98eff2", minWidth: "100px", fontWeight: "bold" }}
                   >
                     Location
                   </TableCell>
                   <TableCell
                     align="left"
-                    style={{ minWidth: "100px", fontWeight: "bold" }}
+                    style={{background:"#98eff2", minWidth: "100px", fontWeight: "bold" }}
                   >
                     Price
                   </TableCell>
@@ -235,7 +236,7 @@ export default function UserList() {
                   {selectedOption != "Portfolio" && (
                     <TableCell
                       align="left"
-                      style={{ minWidth: "50px", fontWeight: "bold" }}
+                      style={{ background:"#98eff2", minWidth: "50px", fontWeight: "bold" }}
                     >
                       Action
                     </TableCell>

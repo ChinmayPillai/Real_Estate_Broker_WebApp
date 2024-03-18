@@ -17,6 +17,7 @@ const FundsPage = () => {
   const [currentFunds, setCurrentFunds] = useState(null); // Initial funds
   const [username, setUsername] = useState("-Username-"); // Initial username
   const { userId } = useAuth();
+  console.log(userId);
   const [addAmount, setAddAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [error, setError] = useState("");
@@ -42,6 +43,24 @@ const FundsPage = () => {
       }
     };
     fetchCurrentFunds(); // Call fetchCurrentFunds just once when the component mounts
+    const fetchUsername = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/users/${userId}`,
+          { method: "GET" }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setUsername(data.name); // Assuming data is an object with a 'username' property
+        } else {
+          setError("Failed to fetch username");
+        }
+      } catch (error) {
+        console.error("Error fetching username:", error);
+        setError("An error occurred while fetching username");
+      }
+    };
+    fetchUsername(); // Call fetchUsername just once when the component mounts
   }, []);
 
   const handleAddFundsConfirmation = () => {
@@ -189,7 +208,7 @@ const FundsPage = () => {
               textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
             }}
           >
-            {userId}
+            {username !== null ? `Welcome, ${username}!` : "Loading..."}
           </Typography>
           <Typography
             variant="h4"
