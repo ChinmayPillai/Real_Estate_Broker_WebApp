@@ -19,6 +19,7 @@ import LimitBidButton from "./BidButton";
 import MarketBidButton from "./BidButton2";
 import LimitSellButton from "./SellButton";
 import MarketSellButton from "./SellButton2";
+import ConfirmationDialog from "./ConfirmationDialogue";
 
 function BasicTable({ buyBids, sellBids }) {
   // Sort rows by buybid in ascending order and sellbid in descending order
@@ -57,64 +58,54 @@ export default function Property() {
   const [userId, setUserId] = useState(1); // Replace with the actual user ID
   const [buyBids, setBuyBids] = useState([]);
   const [sellBids, setSellBids] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+  const [actionType, setActionType] = useState("");
 
-  const handleAddToWatchlist = async () => {
+  const handleAddToWatchlist = () => {
+    setActionType("add");
+    setDialogMessage("Are you sure you want to add this property to your wishlist?");
+    setOpenDialog(true);
+  };
+
+  const handleRemoveFromWatchlist = () => {
+    setActionType("remove");
+    setDialogMessage("Are you sure you want to remove this property from your wishlist?");
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleDialogConfirm = async () => {
+    setOpenDialog(false);
     try {
       const response = await fetch(`http://localhost:8000/api/watchlist/${userId}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          action: 'add',
+          action: actionType,
           property_id: propertyId,
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Added to watchlist:', data.watchlist);
+        console.log("Action successful:", data.message);
         // Handle success, e.g., show a success message
       } else {
         const errorData = await response.json();
-        console.error('Error adding to watchlist:', errorData);
+        console.error("Action failed:", errorData);
         // Handle error, e.g., show an error message
       }
     } catch (error) {
-      console.error('Error adding to watchlist:', error);
+      console.error("Error performing action:", error);
       // Handle error, e.g., show an error message
     }
   };
-
-  const handleRemoveFromWatchlist = async () => {
-    try {
-      const response = await fetch(`http://localhost:8000/api/watchlist/${userId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action: 'remove',
-          property_id: propertyId,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Removed from watchlist:', data.watchlist);
-        // Handle success, e.g., show a success message
-      } else {
-        const errorData = await response.json();
-        console.error('Error removing from watchlist:', errorData);
-        // Handle error, e.g., show an error message
-      }
-    } catch (error) {
-      console.error('Error removing from watchlist:', error);
-      // Handle error, e.g., show an error message
-    }
-  };
-
-
 
   useEffect(() => {
     // Fetch property data from the server based on propertyId
@@ -162,8 +153,8 @@ export default function Property() {
             "Welcome to your dream home! Nestled in the heart of a vibrant community, this charming property boasts modern comforts and classic appeal.",
         };
         setProperty(defaultProperty);
-        setBuyBids([0,0,0,0,0]); // Default buy bids
-        setSellBids([0,0,0,0,0]); // Default sell bids
+        setBuyBids([0, 0, 0, 0, 0]); // Default buy bids
+        setSellBids([0, 0, 0, 0, 0]); // Default sell bids
       }
     };
 
@@ -180,8 +171,8 @@ export default function Property() {
           "Welcome to your dream home! Nestled in the heart of a vibrant community, this charming property boasts modern comforts and classic appeal.",
       };
       setProperty(defaultProperty);
-      setBuyBids([0,0,0,0,0]); // Default buy bids
-      setSellBids([0,0,0,0,0]); // Default sell bids
+      setBuyBids([0, 0, 0, 0, 0]); // Default buy bids
+      setSellBids([0, 0, 0, 0, 0]); // Default sell bids
     }
   }, [propertyId]);
 
@@ -191,6 +182,12 @@ export default function Property() {
 
   return (
     <Container className="property-container" sx={{ mt: 4 }}>
+      <ConfirmationDialog
+        open={openDialog}
+        onClose={handleDialogClose}
+        onConfirm={handleDialogConfirm}
+        message={dialogMessage}
+      />
       <div className="property-content">
         <CardMedia
           component="img"
@@ -200,10 +197,10 @@ export default function Property() {
           className="property-image"
         />
         <div className="property-buttons">
-          <MarketBidButton bidAmount={property.ltp} userId={userId} propertyId={propertyId}/>
-          <LimitBidButton userId={userId} propertyId={propertyId}/>
-          <MarketSellButton bidAmount={property.ltp} userId={userId} propertyId={propertyId}/>
-          <LimitSellButton userId={userId} propertyId={propertyId}/>
+          <MarketBidButton bidAmount={property.ltp} userId={userId} propertyId={propertyId} />
+          <LimitBidButton userId={userId} propertyId={propertyId} />
+          <MarketSellButton bidAmount={property.ltp} userId={userId} propertyId={propertyId} />
+          <LimitSellButton userId={userId} propertyId={propertyId} />
           <Button
             variant="outlined"
             color="primary"
@@ -211,7 +208,7 @@ export default function Property() {
             onClick={handleAddToWatchlist}
           >
             Add to Wishlist
-          </Button >
+          </Button>
           <Button
             variant="outlined"
             color="primary"
@@ -219,7 +216,7 @@ export default function Property() {
             onClick={handleRemoveFromWatchlist}
           >
             Remove from Wishlist
-          </Button >
+          </Button>
           <BasicTable buyBids={buyBids} sellBids={sellBids} />
         </div>
       </div>
