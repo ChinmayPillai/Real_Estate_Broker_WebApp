@@ -13,4 +13,6 @@ urlpatterns = [
     path('limitorder', views.limitOrder),
     path('register', views.register),
     path('login', views.login),
+    path('users/<int:id>', views.get_user),
+    path('support', views.support),
 ]

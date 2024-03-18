@@ -49,3 +49,12 @@ class Order(models.Model):
 
     def __str__(self):
         return f'{self.order_type} Order for {self.prop.name} at {self.price}'
+    
+    
+class Support(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100)
+    message = models.TextField()
+
+    def __str__(self):
+        return self.name
