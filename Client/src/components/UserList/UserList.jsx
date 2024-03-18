@@ -160,7 +160,7 @@ export default function UserList() {
         ))}
       </ul> */}
 
-      <Paper sx={{ background:"#98eff2", width: "98%", overflow: "hidden", padding: "12px" }}>
+      <Paper sx={{ width: "98%", overflow: "hidden", padding: "12px" }}>
         <Select
           value={selectedOption}
           onChange={(event) => {
@@ -205,30 +205,42 @@ export default function UserList() {
 
         {rows.length > 0 && (
           <TableContainer>
-            <Table sx={{background:"#98eff2"}} stickyHeader aria-label="sticky table">
+            <Table sx={{}} stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
                   <TableCell
                     align="left"
-                    style={{ background:"#98eff2", minWidth: "100px", fontWeight: "bold" }}
+                    style={{
+                      minWidth: "100px",
+                      fontWeight: "bold",
+                    }}
                   >
                     Name
                   </TableCell>
                   <TableCell
                     align="left"
-                    style={{background:"#98eff2", minWidth: "100px", fontWeight: "bold" }}
+                    style={{
+                      minWidth: "100px",
+                      fontWeight: "bold",
+                    }}
                   >
                     Category
                   </TableCell>
                   <TableCell
                     align="left"
-                    style={{background:"#98eff2", minWidth: "100px", fontWeight: "bold" }}
+                    style={{
+                      minWidth: "100px",
+                      fontWeight: "bold",
+                    }}
                   >
                     Location
                   </TableCell>
                   <TableCell
                     align="left"
-                    style={{background:"#98eff2", minWidth: "100px", fontWeight: "bold" }}
+                    style={{
+                      minWidth: "100px",
+                      fontWeight: "bold",
+                    }}
                   >
                     Price
                   </TableCell>
@@ -236,7 +248,10 @@ export default function UserList() {
                   {selectedOption != "Portfolio" && (
                     <TableCell
                       align="left"
-                      style={{ background:"#98eff2", minWidth: "50px", fontWeight: "bold" }}
+                      style={{
+                        minWidth: "50px",
+                        fontWeight: "bold",
+                      }}
                     >
                       Action
                     </TableCell>
