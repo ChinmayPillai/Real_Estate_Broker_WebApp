@@ -82,7 +82,7 @@ const Navbar = () => {
               to={{ pathname: "/user/Wishlist" }}
               onClick={toggleDrawer}
             >
-              <ListItemText primary="Wishlist" />
+              <ListItemText primary="Watchlist" />
             </ListItemButton>
             <ListItemButton component={Link} to="/funds" onClick={toggleDrawer}>
               <ListItemText primary="Funds" />
@@ -127,7 +127,7 @@ const Navbar = () => {
           to={{ pathname: "/user/Wishlist" }}
           sx={{ display: { xs: "none", md: "block" } }}
         >
-          Wishlist
+          Watchlist
         </Button>
         <Button
           color="inherit"
