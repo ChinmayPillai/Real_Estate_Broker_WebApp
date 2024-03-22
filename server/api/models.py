@@ -27,7 +27,7 @@ class UserProfile(AbstractUser):
     pnl = models.IntegerField(default=0)
     portfolio = models.JSONField(null=True, blank=True, default=list)
     watchlist = models.JSONField(null=True, blank=True, default=list)
-    pan = models.CharField(max_length=10, default='ABCDE1234F',unique=True)
+    pan = models.CharField(max_length=10, unique=True)
 
 
     REQUIRED_FIELDS = []
