@@ -9,13 +9,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
-const LimitBidButton = ({ userId, propertyId }) => {
+const LimitBidButton = ({ userId, propertyId, login }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [bidAmount, setBidAmount] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
-
+  const navigate = useNavigate();
   const handleClick = (event) => {
+    if (!login) navigate("/login");
+
     setAnchorEl(event.currentTarget);
   };
 

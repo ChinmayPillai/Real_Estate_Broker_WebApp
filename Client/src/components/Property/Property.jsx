@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Typography,
   Container,
@@ -68,9 +68,13 @@ export default function Property() {
   const [dialogMessage, setDialogMessage] = useState("");
   const [actionType, setActionType] = useState("");
   const [propertyimg, setPropertyimg] = useState(defpropertyimg);
-  const { userId } = useAuth();
+  const { isLoggedIn, userId } = useAuth();
+  const navigate = useNavigate();
 
   const handleAddToWatchlist = () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
     setActionType("add");
     setDialogMessage(
       "Are you sure you want to add this property to your wishlist?"
@@ -79,6 +83,9 @@ export default function Property() {
   };
 
   const handleRemoveFromWatchlist = () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
     setActionType("remove");
     setDialogMessage(
       "Are you sure you want to remove this property from your wishlist?"
@@ -229,14 +236,24 @@ export default function Property() {
             bidAmount={property.ltp}
             userId={userId}
             propertyId={propertyId}
+            login={isLoggedIn}
           />
-          <LimitBidButton userId={userId} propertyId={propertyId} />
+          <LimitBidButton
+            userId={userId}
+            propertyId={propertyId}
+            login={isLoggedIn}
+          />
           <MarketSellButton
             bidAmount={property.ltp}
             userId={userId}
             propertyId={propertyId}
+            login={isLoggedIn}
           />
-          <LimitSellButton userId={userId} propertyId={propertyId} />
+          <LimitSellButton
+            userId={userId}
+            propertyId={propertyId}
+            login={isLoggedIn}
+          />
           <Button
             variant="outlined"
             color="primary"

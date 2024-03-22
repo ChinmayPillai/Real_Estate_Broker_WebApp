@@ -6,11 +6,15 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
-const MarketBidButton = ({ bidAmount, userId, propertyId }) => {
+const MarketBidButton = ({ bidAmount, userId, propertyId, login }) => {
   const [openDialog, setOpenDialog] = useState(false);
+  const navigate = useNavigate();
 
   const handleDialogOpen = () => {
+    if (!login) navigate("/login");
+
     setOpenDialog(true);
   };
 
