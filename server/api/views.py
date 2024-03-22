@@ -207,7 +207,7 @@ def portfolio(request, id):
             return Response({"error": "action field is required"}, status=status.HTTP_400_BAD_REQUEST)
         
         
-        property_id = request.data.get('property_id')
+        property_id = int(request.data.get('property_id'))
         if property_id is None:
             return Response({"error": "property_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -239,7 +239,7 @@ def marketOrder(request):
     if user_id is None:
         return Response({"error": "user_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
     
-    property_id = request.data.get('property_id')
+    property_id = int(request.data.get('property_id'))
     if property_id is None:
         return Response({"error": "property_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
     
@@ -332,7 +332,7 @@ def limitOrder(request):
         if user_id is None:
             return Response({"error": "user_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
         
-        property_id = request.data.get('property_id')
+        property_id = int(request.data.get('property_id'))
         if property_id is None:
             return Response({"error": "property_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
         
