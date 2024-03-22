@@ -56,11 +56,19 @@ export default function SignUp() {
 
         navigate("/login");
       } else {
-        // Handle error response
-        console.error(userData.username[0]);
-        event.target.reset();
-
-        Swal.fire("Error!", userData.username[0], "error");
+        // console.log(userData);
+        // // Handle error response
+        // if (userData.username && userData.username.length > 0) {
+        //   // Display the first error message if available
+        //   Swal.fire("Error!", userData.username[0], "error");
+        // } else {
+        //   // Display a generic error message
+        Swal.fire(
+          "Error!",
+          "User with the entered details already exists",
+          "error"
+        );
+        // }
       }
     } catch (error) {
       // Handle network errors

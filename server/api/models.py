@@ -21,13 +21,13 @@ class UserProfile(AbstractUser):
 
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
-    phone = models.CharField(max_length=10)
+    phone = models.CharField(max_length=10,unique=True)
     funds = models.PositiveIntegerField(default=0)
     money_invested = models.PositiveIntegerField(default=0)
     pnl = models.IntegerField(default=0)
     portfolio = models.JSONField(null=True, blank=True, default=list)
     watchlist = models.JSONField(null=True, blank=True, default=list)
-    pan = models.CharField(max_length=10, default='ABCDE1234F')
+    pan = models.CharField(max_length=10, default='ABCDE1234F',unique=True)
 
 
     REQUIRED_FIELDS = []
