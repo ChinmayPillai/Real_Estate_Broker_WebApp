@@ -228,7 +228,7 @@ export default function Property() {
           component="img"
           image={property.image || propertyimg}
           alt="property image"
-          sx={{ width: 650, objectFit: "cover" }}
+          sx={{ width: "50%", objectFit: "cover" }}
           className="property-image"
         />
         <div className="property-buttons">
