@@ -64,7 +64,7 @@ export default function Home() {
                   <CardMedia
                     component="img"
                     height="200"
-                    image={propertyimg}
+                    image={property.image || propertyimg}
                     alt={property.category}
                     sx={{
                       padding: "10px",
