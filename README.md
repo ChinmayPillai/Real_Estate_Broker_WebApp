@@ -16,22 +16,15 @@ npm run dev
 
 ### Server
 
-1. Package Installations
-```
-pip install django
-pip install mysqlclient
-```
-
-2. Database Setup
+1. Database Setup
     * Install MySQL
     * Create database/schema named *real_estate_broker*
     * Create user named *dev* with password *123* with DBA role (full access to the above database)
 
-3. Run Server
+2. Install Packages and Run Server
 ```
 cd server
-pip install djangorestframework
-pip install django-cors-headers
+pip install requirements.txt
 python manage.py makemigrations
 python manage.py migrate 
 python manage.py runserver
@@ -64,21 +57,21 @@ python manage.py createsuperuser
 ## Tech Stack
 
 ### Frontend
-JavaScript
-ReactJS
-React-Router-Dom
-Material UI
-Bootstrap
-HTML 5
-CSS
+* JavaScript
+* ReactJS
+* React-Router-Dom
+* Material UI
+* Bootstrap
+* HTML 5
+* CSS
 
 
 ### Backend
-Python
-Django
-Django REST Framework
-MySQLClient
-Django CORS Headers
+* Python
+* Django
+* Django REST Framework
+* MySQLClient
+* Django CORS Headers
 
 ### Database
-MySQL
+* MySQL
