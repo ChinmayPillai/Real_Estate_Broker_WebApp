@@ -48,3 +48,11 @@ class TestModels(TestCase):
 
         with pytest.raises(IntegrityError):
             Order.objects.create(user_id=999, prop=prop, price=500, order_type='buy')
+
+
+    # Creating a new instance of Support with valid name, email and message
+    def test_valid_instance(self):
+        support = Support(name="John Doe", email="johndoe@example.com", message="Hello")
+        assert support.name == "John Doe"
+        assert support.email == "johndoe@example.com"
+        assert support.message == "Hello"
