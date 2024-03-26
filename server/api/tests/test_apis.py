@@ -329,7 +329,7 @@ class TestOrderBook(TestCase):
     def test_get_top_5_buy_orders_for_property(self):
         # Arrange
         property_id = 1
-        request = RequestFactory().get(f'/buy_orders/{property_id}')
+        request = RequestFactory().get(f'/orders/buy/{property_id}')
 
         # Act
         response = buy_orders(request, property_id)
@@ -345,7 +345,7 @@ class TestOrderBook(TestCase):
     def test_get_top_5_sell_orders_for_property(self):
         # Arrange
         property_id = 1
-        request = RequestFactory().get(f'/sell_orders/{property_id}')
+        request = RequestFactory().get(f'/orders/sell/{property_id}')
 
         # Act
         response = sell_orders(request, property_id)
@@ -362,7 +362,7 @@ class TestOrderBook(TestCase):
     def test_get_invalid_buy_orders(self):
         # Arrange
         invalid_id = 9999
-        request = RequestFactory().get(f'/buy_orders/{invalid_id}')
+        request = RequestFactory().get(f'/orders/buy/{invalid_id}')
 
         # Act
         response = buy_orders(request, invalid_id)
@@ -377,7 +377,7 @@ class TestOrderBook(TestCase):
     def test_get_sell_orders_with_invalid_id_returns_empty_list(self):
         # Arrange
         invalid_id = 9999
-        request = RequestFactory().get(f'/sell_orders/{invalid_id}')
+        request = RequestFactory().get(f'/orders/sell/{invalid_id}')
 
         # Act
         response = sell_orders(request, invalid_id)
