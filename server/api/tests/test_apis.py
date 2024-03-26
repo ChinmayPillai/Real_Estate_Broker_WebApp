@@ -235,3 +235,92 @@ class TestLoginRegister(TestCase):
         assert response.data['message'] == 'Invalid username or password'
 
 
+class TestFunds(TestCase):
+
+    def setUp(self):
+        self.user = UserProfile.objects.create(id=1, username='test_user', password=make_password('test_password'), funds=100)
+
+    # GET request to /funds/{id} returns user funds
+    def test_get_user_funds(self):
+        # Arrange
+        user_id = 1
+        request = RequestFactory().get(f'/funds/{user_id}')
+
+        # Act
+        response = funds(request, user_id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert 'funds' in response.data
+
+    # PUT request to /funds/{id} adds funds to user account
+    def test_put_request_adds_funds_to_user_account(self):
+        # Arrange
+        user_id = 1
+        data = {
+            'action': 'add',
+            'amount': 100
+        }
+        request = RequestFactory().put(
+            f'/funds/{user_id}',
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+    
+        # Act
+        response = funds(request, user_id)
+    
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert 'funds' in response.data
+        assert response.data['funds'] == 200
+
+    
+    # PUT request to /funds/{id} withdraws funds from user account
+    def test_put_request_withdraws_funds_from_user_account(self):
+        # Arrange
+        user_id = 1
+        data = {
+            'action': 'withdraw',
+            'amount': 50
+        }
+        request = RequestFactory().put(
+            f'/funds/{user_id}',
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+    
+        # Act
+        response = funds(request, user_id)
+    
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert 'funds' in response.data
+        assert response.data['funds'] == 50
+    
+
+    # PUT request with excess withdraw amount returns an error message
+    def test_put_request_with_excess_withdraw_amount(self):
+        # Arrange
+        user_id = 1
+
+        data = {
+            'action': 'withdraw',
+            'amount': 200
+        }
+        request = RequestFactory().put(
+            f'/funds/{user_id}',
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+
+        # Act
+        response = funds(request, user_id)
+
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert 'error' in response.data
+        assert response.data['error'] == 'Insufficient funds'
+
+
+    
