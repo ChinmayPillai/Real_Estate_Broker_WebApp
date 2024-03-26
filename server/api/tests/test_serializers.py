@@ -11,26 +11,30 @@ class TestSerializers(TestCase):
     def test_pan_format_valid(self):
         serializer = RegisterSerializer()
         pan = "ABCDE1234F"
-        result = serializer.validate_pan(pan)
-        assert result == pan
+        data = {"pan": pan, "phone": "9876543210"}
+        result = serializer.validate(data)
+        assert result["pan"] == pan
 
     # PAN number has less than 10 characters
-    def test_pan_length_invalid(self):
+    def test_pan_length_shorter(self):
         serializer = RegisterSerializer()
         pan = "ABCDE123"
+        data = {"pan": pan, "phone": "9876543210"}
         with pytest.raises(serializers.ValidationError):
-            serializer.validate_pan(pan)
+            serializer.validate(data)
     
     # PAN number has more than 10 characters
-    def test_pan_length_invalid(self):
+    def test_pan_length_longer(self):
         serializer = RegisterSerializer()
         pan = "ABCDE12345F"
+        data = {"pan": pan, "phone": "9876543210"}
         with pytest.raises(serializers.ValidationError):
-            serializer.validate_pan(pan)
+            serializer.validate(data)
     
     # PAN number has alphabets in the wrong position
     def test_pan_invalid(self):
         serializer = RegisterSerializer()
         pan = "12345ABCDE"
+        data = {"pan": pan, "phone": "9876543210"}
         with pytest.raises(serializers.ValidationError):
-            serializer.validate_pan(pan)
+            serializer.validate(data)
