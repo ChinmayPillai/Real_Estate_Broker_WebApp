@@ -1,5 +1,7 @@
 from django.test import TestCase
+import pytest
 from api.models import UserProfile, Property, Order, Support
+from django.db import IntegrityError
 
 class TestModels(TestCase):
     
@@ -27,3 +29,22 @@ class TestModels(TestCase):
         assert property.image == "Test Image"
         assert property.location == "Test Location"
         assert property.ltp == 100.00
+    
+    # Creating a buy order for a property with valid user, property, and price
+    def test_create_buy_order_with_valid_inputs(self):
+        user = UserProfile.objects.create(name="John", email="john@example.com")
+        prop = Property.objects.create(name="Property 1", ltp=1000)
+        order = Order.objects.create(user=user, prop=prop, price=500, order_type='buy')
+    
+        assert order.user == user
+        assert order.prop == prop
+        assert order.price == 500
+        assert order.order_type == 'buy'
+
+    
+    # Creating an order with a non-existent user
+    def test_create_order_with_nonexistent_user(self):
+        prop = Property.objects.create(name="Property 1", ltp=1000)
+
+        with pytest.raises(IntegrityError):
+            Order.objects.create(user_id=999, prop=prop, price=500, order_type='buy')
