@@ -323,4 +323,66 @@ class TestFunds(TestCase):
         assert response.data['error'] == 'Insufficient funds'
 
 
+class TestOrderBook(TestCase):
+
+    # GET request to /buy_orders/{id} returns top 5 buy orders for property with given id
+    def test_get_top_5_buy_orders_for_property(self):
+        # Arrange
+        property_id = 1
+        request = RequestFactory().get(f'/buy_orders/{property_id}')
+
+        # Act
+        response = buy_orders(request, property_id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) <= 5
+        for order in response.data:
+            assert order['order_type'] == 'buy'
+            assert order['prop'] == property_id
+
+    # GET request to /sell_orders/{id} returns top 5 sell orders for property with given id
+    def test_get_top_5_sell_orders_for_property(self):
+        # Arrange
+        property_id = 1
+        request = RequestFactory().get(f'/sell_orders/{property_id}')
+
+        # Act
+        response = sell_orders(request, property_id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) <= 5
+        for order in response.data:
+            assert order['order_type'] == 'sell'
+            assert order['prop'] == property_id
     
+
+    # GET request to /buy_orders/{id} with invalid id returns empty list
+    def test_get_invalid_buy_orders(self):
+        # Arrange
+        invalid_id = 9999
+        request = RequestFactory().get(f'/buy_orders/{invalid_id}')
+
+        # Act
+        response = buy_orders(request, invalid_id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert isinstance(response.data, list)
+        assert len(response.data) == 0
+
+
+    # GET request to /sell_orders/{id} with invalid id returns empty list
+    def test_get_sell_orders_with_invalid_id_returns_empty_list(self):
+        # Arrange
+        invalid_id = 9999
+        request = RequestFactory().get(f'/sell_orders/{invalid_id}')
+
+        # Act
+        response = sell_orders(request, invalid_id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert isinstance(response.data, list)
+        assert len(response.data) == 0
