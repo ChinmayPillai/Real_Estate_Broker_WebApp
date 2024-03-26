@@ -48,6 +48,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         Validator function to ensure PAN card number follows the format of 5 alphabets followed by 4 numbers
         followed by another alphabet.
         """
+        if len(value) != 10:
+            raise serializers.ValidationError('PAN number must be of length 10')
+
         if not value[:5].isalpha() or not value[5:9].isdigit() or not value[9].isalpha():
             raise serializers.ValidationError('PAN number must be valid')
         return value
