@@ -403,6 +403,172 @@ class TestOrderBook(TestCase):
 
  
 
+class TestWatchlist(TestCase):
+
+    def setUp(self):
+        self.user = UserProfile.objects.create(id=1, username='test_user', password=make_password('test_password'))
+        Property.objects.create(id=1, name='Test Property 1', category='Test Category 1', description='Test Description', image='Test Image', location='Test Location', ltp=100.00)
+        Property.objects.create(id=2, name='Test Property 2', category='Test Category 2', description='Test Description 2', image='Test Image 2', location='Test Location 2', ltp=200.00)
+        Property.objects.create(id=3, name='Test Property 3', category='Test Category 3', description='Test Description 3', image='Test Image 3', location='Test Location 3', ltp=300.00)
+
+    # Returns HTTP 404 if user with given id does not exist
+    def test_user_not_found(self):
+        # Arrange
+        id = 100
+        request = RequestFactory().get(f'/watchlist/{id}')
+    
+        # Act
+        response = watchlist(request, id)
+    
+        # Assert
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    # Returns HTTP 400 if action field is missing in request data
+    def test_missing_action_field(self):
+        # Arrange
+        id = 1
+        request = RequestFactory().put(f'/watchlist/{id}')
+    
+        # Act
+        response = watchlist(request, id)
+    
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    # Returns user's watchlist if request method is GET
+    def test_get_watchlist(self):
+        # Arrange
+        id = 1
+        request = RequestFactory().get(f'/watchlist/{id}')
+        self.user.watchlist = [1, 2, 3]
+        self.user.save()
+
+        # Act
+        response = watchlist(request, id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == {"watchlist": [1, 2, 3]}
+
+    # Removes property_id from user's watchlist if action is 'remove' and property_id is in watchlist
+    def test_remove_property_from_watchlist(self):
+        # Arrange
+        id = 1
+        self.user.watchlist=[1, 2, 3]
+        self.user.save()
+        data = {'action': 'remove', 'property_id': 2}
+        request = RequestFactory().put(f'/watchlist/{id}', data=data, content_type='application/json')
+
+        # Act
+        response = watchlist(request, id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == {"watchlist": [1, 3]}
+
+    # Adds property_id to user's watchlist if action is 'add' and property_id is not already in watchlist
+    def test_add_property_to_watchlist(self):
+        # Arrange
+        id = 1
+        data = {"action": "add", "property_id": 1}
+        request = RequestFactory().put(f'/watchlist/{id}', data=data, content_type='application/json')
+        self.user.watchlist = [2, 3]
+        self.user.save()
+
+        # Act
+        response = watchlist(request, id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == {"watchlist": [2, 3, 1]}
+
+    # Returns HTTP 400 if action is not 'add' or 'remove'
+    def test_invalid_action(self):
+        # Arrange
+        id = 1
+        data = {"action": 'invalid', 'property_id': 1}
+        request = RequestFactory().put(f'/watchlist/{id}', data=data, content_type='application/json')
+    
+        # Act
+        response = watchlist(request, id)
+    
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    # Returns HTTP 400 if property_id field is missing in request data
+    def test_missing_property_id(self):
+        # Arrange
+        id = 1
+        request = RequestFactory().put(f'/watchlist/{id}')
+
+        # Act
+        response = watchlist(request, id)
+
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    # Does not raise any exceptions if user's watchlist is None and action is 'remove'
+    def test_user_watchlist_remove_no_exceptions(self):
+        # Arrange
+        id = 1
+        data = {'action': 'remove', 'property_id': 1}
+        request = RequestFactory().put(f'/watchlist/{id}', data=data, content_type='application/json')
+
+        # Act
+        response = watchlist(request, id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == {"watchlist": []}
+
+    # Does not add property_id to watchlist if it is already in watchlist
+    def test_does_not_add_property_id_if_already_in_watchlist(self):
+        # Arrange
+        id = 1
+        self.user.watchlist=[1, 2, 3]
+        self.user.save()
+        data = {'action': 'add', 'property_id': 1}
+        request = RequestFactory().put(f'/watchlist/{id}', data=data, content_type='application/json')
+
+        # Act
+        response = watchlist(request, id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == {"watchlist": [1, 2, 3]}
+
+    # Does not remove property_id from watchlist if it is not in watchlist
+    def test_does_not_remove_property_id_if_not_in_watchlist(self):
+        # Arrange
+        id = 1
+        self.user.watchlist=[2, 3]
+        self.user.save()
+        data = {'action': 'remove', 'property_id': 4}
+        request = RequestFactory().put(f'/watchlist/{id}', data=data, content_type='application/json')
+
+        # Act
+        response = watchlist(request, id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["watchlist"] == [2, 3]
+
+    # Sets user's watchlist to [property_id] if watchlist is None and action is 'add'
+    def test_sets_watchlist_to_property_id_if_watchlist_is_none_and_action_is_add(self):
+        # Arrange
+        id = 1
+        data = {'action': 'add', 'property_id': 1}
+        request = RequestFactory().put(f'/watchlist/{id}', data=data, content_type='application/json')
+
+        # Act
+        response = watchlist(request, id)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == {'watchlist': [1]}
+
+
+
 class TestUserData(TestCase):
 
     def setUp(self):
@@ -442,7 +608,7 @@ class TestUserData(TestCase):
         # Assert
         assert response.status_code == status.HTTP_404_NOT_FOUND
 
-    
+
 class TestSupport(TestCase):
 
     # POST request to /support with valid data sends a message to support
