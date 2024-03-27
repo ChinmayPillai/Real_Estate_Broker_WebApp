@@ -932,3 +932,159 @@ class TestMarketOrder(TestCase):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.data["error"] == "Insufficient funds"
     
+
+class TestLimitOrder(TestCase):
+    def setUp(self):
+        self.user = UserProfile.objects.create(id=1, username='test_user', password=make_password('test_password'), funds=1000, email='test@example.com', portfolio = [2, 3])
+        self.user2 = UserProfile.objects.create(id=2, username='test_user2', password=make_password('test_password2'), funds=10, portfolio=[1], email='test2@example.com')
+        self.property = Property.objects.create(id=1, name='Test Property', category='Test Category', description='Test Description', location='Test Location', ltp=100.00)
+        self.property2 = Property.objects.create(id=2, name='Test Property, Test Category', category='Test Category', description='Test Description', location='Test Location', ltp=100.00)
+        self.property3 = Property.objects.create(id=3, name='Test Property', category='Test Category', description='Test Description', location='Test Location', ltp=100.00)
+        self.property4 = Property.objects.create(id=4, name='Test Property', category='Test Category', description='Test Description', location='Test Location', ltp=100.00)
+    
+    def test_insufficient_funds(self):
+        # Arrange
+        data = {
+            'user_id': 2,
+            'property_id': 3,
+            'action': 'buy',
+            'price': 50
+        }
+        request = RequestFactory().post('/limitorder', data=data, content_type='application/json')
+
+        # Act
+        response = limitOrder(request)
+
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data["error"] == "Insufficient funds"
+
+    
+        # The function receives a valid POST request with all required fields and creates a new order successfully.
+    def test_valid_post_request(self):
+        # Arrange
+        request_data = {
+            'action': 'buy',
+            'user_id': 1,
+            'property_id': 1,
+            'price': 1000
+        }
+
+        request = RequestFactory().post('/limitorder', data=request_data, content_type='application/json')
+    
+        # Act
+        response = limitOrder(request)
+    
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == {"funds": 1000, "portfolio": [2,3]}
+    
+    def test_valid_sell_request(self):
+        # Arrange
+        request_data = {
+            'action': 'sell',
+            'user_id': 1,
+            'property_id': 2,
+            'price': 1000
+        }
+
+        request = RequestFactory().post('/limitorder', data=request_data, content_type='application/json')
+    
+        # Act
+        response = limitOrder(request)
+    
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == {"funds": 1000, "portfolio": [2,3]}
+    
+    
+    def test_invalid_sell_request(self):
+        # Arrange
+        request_data = {
+            'action': 'sell',
+            'user_id': 1,
+            'property_id': 1,
+            'price': 1000
+        }
+
+        request = RequestFactory().post('/limitorder', data=request_data, content_type='application/json')
+    
+        # Act
+        response = limitOrder(request)
+    
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data["error"] == "Property not in portfolio"
+    
+        # The function receives a POST request with a missing 'action' field and returns an error message.
+    def test_missing_action_field(self):
+        # Arrange
+        request_data = {
+            'user_id': 1,
+            'property_id': 1,
+            'price': 1000
+        }
+
+        request = RequestFactory().post('/limitorder', data=request_data, content_type='application/json')
+    
+        # Act
+        response = limitOrder(request)
+    
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data == {"error": "action field is required"}
+
+
+    def test_missing_prop_id_field(self):
+        # Arrange
+        request_data = {
+            'user_id': 1,
+            'price': 1000,
+            'action': 'buy'
+        }
+
+        request = RequestFactory().post('/limitorder', data=request_data, content_type='application/json')
+    
+        # Act
+        response = limitOrder(request)
+    
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data == {"error": "property_id field is required"}
+
+
+    def test_missing_user_id_field(self):
+        # Arrange
+        request_data = {
+            'property_id': 1,
+            'price': 1000,
+            "action": "buy"
+        }
+
+        request = RequestFactory().post('/limitorder', data=request_data, content_type='application/json')
+    
+        # Act
+        response = limitOrder(request)
+    
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data == {"error": "user_id field is required"}
+
+
+    def test_sell_unowned_prop(self):
+        # Arrange
+        data = {
+            'user_id': 1,
+            'property_id': 1,
+            'action': 'sell',
+            "price" : 20
+        }
+        request = RequestFactory().post('/limitorder', data=data, content_type='application/json')
+
+        # Act
+        response = limitOrder(request)
+
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data["error"] == "Property not in portfolio"
+    
