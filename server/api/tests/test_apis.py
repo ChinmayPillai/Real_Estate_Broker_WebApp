@@ -339,7 +339,7 @@ class TestFunds(TestCase):
 
 class TestOrderBook(TestCase):
 
-    # GET request to /buy_orders/{id} returns top 5 buy orders for property with given id
+    # GET request to /orders/buy/{id} returns top 5 buy orders for property with given id
     def test_get_top_5_buy_orders_for_property(self):
         # Arrange
         property_id = 1
@@ -355,7 +355,7 @@ class TestOrderBook(TestCase):
             assert order['order_type'] == 'buy'
             assert order['prop'] == property_id
 
-    # GET request to /sell_orders/{id} returns top 5 sell orders for property with given id
+    # GET request to /orders/sell/{id} returns top 5 sell orders for property with given id
     def test_get_top_5_sell_orders_for_property(self):
         # Arrange
         property_id = 1
@@ -372,7 +372,7 @@ class TestOrderBook(TestCase):
             assert order['prop'] == property_id
     
 
-    # GET request to /buy_orders/{id} with invalid id returns empty list
+    # GET request to /orders/buy/{id} with invalid id returns empty list
     def test_get_invalid_buy_orders(self):
         # Arrange
         invalid_id = 9999
@@ -387,7 +387,7 @@ class TestOrderBook(TestCase):
         assert len(response.data) == 0
 
 
-    # GET request to /sell_orders/{id} with invalid id returns empty list
+    # GET request to /orders/sell/{id} with invalid id returns empty list
     def test_get_sell_orders_with_invalid_id_returns_empty_list(self):
         # Arrange
         invalid_id = 9999
@@ -402,3 +402,64 @@ class TestOrderBook(TestCase):
         assert len(response.data) == 0
 
  
+
+class TestUserData(TestCase):
+
+    def setUp(self):
+        user = UserProfile.objects.create(id=1, username='test_user', password=make_password('test_password'))
+
+    
+    # GET request to /users/{id} returns user with given id
+    def test_get_user_returns_user_with_given_id(self):
+        # Arrange
+        user_id = 1
+        request = RequestFactory().get(f'/users/{user_id}')
+    
+        # Act
+        response = get_user(request, user_id)
+    
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert 'name' in response.data
+        assert 'email' in response.data
+        assert 'phone' in response.data
+        assert 'funds' in response.data
+        assert 'money_invested' in response.data
+        assert 'pnl' in response.data
+        assert 'portfolio' in response.data
+        assert 'watchlist' in response.data
+        assert 'pan' in response.data
+
+    # GET request to /users/{id} with invalid id returns 404
+    def test_get_user_with_invalid_id_returns_404(self):
+        # Arrange
+        invalid_id = 9999
+        request = RequestFactory().get(f'/users/{invalid_id}')
+    
+        # Act
+        response = get_user(request, invalid_id)
+    
+        # Assert
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    
+class TestSupport(TestCase):
+
+    # POST request to /support with valid data sends a message to support
+    def test_post_request_to_support_with_valid_data_sends_message_to_support(self):
+        # Arrange
+        valid_data = {
+            'name': 'John Doe',
+            'email': 'john@example.com',
+            'message': 'This is a test support message.',
+            # Include any other required fields
+        }
+        request = RequestFactory().post('/support/', data=valid_data)
+
+        # Act
+        response = support(request)
+
+        # Assert
+        assert response.status_code == status.HTTP_201_CREATED
+        assert response.data == {'message': 'Message sent successfully'}
+
