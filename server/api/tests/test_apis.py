@@ -796,3 +796,118 @@ class TestSupport(TestCase):
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data == {'message': 'Message sent successfully'}
 
+
+class TestMarketOrder(TestCase):
+
+    def setUp(self):
+        self.user = UserProfile.objects.create(id=1, username='test_user', password=make_password('test_password'), funds=1000, email='test@example.com', portfolio = [2, 3])
+        self.user2 = UserProfile.objects.create(id=2, username='test_user2', password=make_password('test_password2'), funds=10, portfolio=[1], email='test2@example.com')
+        self.property = Property.objects.create(id=1, name='Test Property', category='Test Category', description='Test Description', location='Test Location', ltp=100.00)
+        self.property2 = Property.objects.create(id=2, name='Test Property, Test Category', category='Test Category', description='Test Description', location='Test Location', ltp=100.00)
+        self.property3 = Property.objects.create(id=3, name='Test Property', category='Test Category', description='Test Description', location='Test Location', ltp=100.00)
+        self.property4 = Property.objects.create(id=4, name='Test Property', category='Test Category', description='Test Description', location='Test Location', ltp=100.00)
+        Order.objects.create(user=self.user2, prop=self.property, price=50, order_type='sell')
+        Order.objects.create(user=self.user2, prop=self.property, price=45, order_type='buy')
+        Order.objects.create(user=self.user2, prop=self.property2, price=45, order_type='sell')
+        Order.objects.create(user=self.user, prop=self.property3, price=50, order_type='sell')
+
+    # Place Market Order Buy
+    def test_buy_market_order(self):
+        # Arrange
+        data = {
+            'user_id': 1,
+            'property_id': 1,
+            'action': 'buy'
+        }
+        request = RequestFactory().put('/marketorder', data=data, content_type='application/json')
+
+        # Act
+        response = marketOrder(request)
+
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert 'portfolio' in response.data
+    
+    
+    def test_no_buy_orders(self):
+        # Arrange
+        data = {
+            'user_id': 1,
+            'property_id': 2,
+            'action': 'sell'
+        }
+        request = RequestFactory().put('/marketorder', data=data, content_type='application/json')
+
+        # Act
+        response = marketOrder(request)
+
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data["error"] == "No buy orders available for this property"
+
+    
+    def test_no_sell_orders(self):
+        # Arrange
+        data = {
+            'user_id': 2,
+            'property_id': 4,
+            'action': 'buy'
+        }
+        request = RequestFactory().put('/marketorder', data=data, content_type='application/json')
+
+        # Act
+        response = marketOrder(request)
+
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data["error"] == "No sell orders available for this property"
+
+    def test_sell_unowned_prop(self):
+        # Arrange
+        data = {
+            'user_id': 1,
+            'property_id': 1,
+            'action': 'sell'
+        }
+        request = RequestFactory().put('/marketorder', data=data, content_type='application/json')
+
+        # Act
+        response = marketOrder(request)
+
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data["error"] == "Property not in portfolio"
+    
+    def test_owned_prop(self):
+        # Arrange
+        data = {
+            'user_id': 2,
+            'property_id': 2,
+            'action': 'buy'
+        }
+        request = RequestFactory().put('/marketorder', data=data, content_type='application/json')
+
+        # Act
+        response = marketOrder(request)
+
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data["error"] == "You can't buy your own property"
+
+
+    def test_insufficient_funds(self):
+        # Arrange
+        data = {
+            'user_id': 2,
+            'property_id': 3,
+            'action': 'buy'
+        }
+        request = RequestFactory().put('/marketorder', data=data, content_type='application/json')
+
+        # Act
+        response = marketOrder(request)
+
+        # Assert
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data["error"] == "Insufficient funds"
+    
