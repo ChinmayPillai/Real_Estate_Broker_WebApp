@@ -332,10 +332,11 @@ def limitOrder(request):
         if user_id is None:
             return Response({"error": "user_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
         
-        property_id = int(request.data.get('property_id'))
+        property_id = request.data.get('property_id')
         if property_id is None:
             return Response({"error": "property_id field is required"}, status=status.HTTP_400_BAD_REQUEST)
-        
+        property_id = int(property_id)
+
         price = request.data.get('price')
         if price is None:
             return Response({"error": "price field is required"}, status=status.HTTP_400_BAD_REQUEST)
@@ -354,7 +355,7 @@ def limitOrder(request):
         if action == 'buy':
             if user.funds < price:
                 return Response({"error": "Insufficient funds"}, status=status.HTTP_400_BAD_REQUEST)
-            if (property_id) in user.portfolio:
+            if property_id in user.portfolio:
                 return Response({"error": "Property already in portfolio"}, status=status.HTTP_400_BAD_REQUEST)             
         elif action == 'sell':
             if property_id not in user.portfolio:
