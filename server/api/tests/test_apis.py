@@ -2,12 +2,26 @@ import json
 from django.test import RequestFactory, TestCase
 from api.models import UserProfile, Property, Order, Support
 from rest_framework import status
-from api.views import register, login, marketOrder, limitOrder, property, property_by_id, buy_orders, sell_orders, funds, watchlist, portfolio, get_user, support
+from api.views import register, login, marketOrder, limitOrder, property_list, property_by_id, buy_orders, sell_orders, funds, watchlist, portfolio, get_user, support
 from api.serializers import PropertySerializer
 from django.contrib.auth.hashers import make_password
 
     
-class TestPropertyById(TestCase):
+class TestProperties(TestCase):
+
+     # GET request to /property returns all properties
+    def test_get_all_properties(self):
+        # Arrange
+        request = RequestFactory().get('/property')
+        property = Property.objects.create(name='Test Property', category='Test Category', description='Test Description', image='Test Image', location='Test Location', ltp=100.00)
+    
+        # Act
+        response = property_list(request)
+    
+        # Assert
+        assert response.status_code == status.HTTP_200_OK
+        assert 'properties' in response.data
+        assert len(response.data['properties']) > 0
 
     # The function returns a valid property object when given a valid id and a GET request.
     def test_valid_property_object(self):
@@ -386,3 +400,5 @@ class TestOrderBook(TestCase):
         assert response.status_code == status.HTTP_200_OK
         assert isinstance(response.data, list)
         assert len(response.data) == 0
+
+ 

@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import check_password
 
 # API to get All Properties
 @api_view(['GET'])
-def property(request):
+def property_list(request):
     property = Property.objects.all()
     serializer = PropertySerializer(property, many=True)
     return Response({"properties": serializer.data})
