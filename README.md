@@ -54,6 +54,13 @@ python manage.py createsuperuser
     * **Market Orders**: Users can purchase a property at the current market price. This is a quicker option but offers less control over the purchase price.
 5. Users can add funds for buying and withdraw funds obtained from selling the properties. 
 
+
+## Testing the API Backend
+```
+cd server
+python manage.py test api
+```
+
 ## Tech Stack
 
 ### Frontend
